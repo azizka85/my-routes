@@ -1,0 +1,36 @@
+@use '../functions' as global-functions;
+
+@use '../theme' as global-theme;
+
+@use '../variables' as global-variables;
+@use './variables';
+
+.list {
+  display: flex;
+  flex-direction: column;  
+  line-height: variables.$line-height;
+  margin: variables.$margin-vertical 0;
+
+  &-item {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;    
+    overflow: hidden;    
+    text-decoration: none;
+    color: global-functions.property(tint-30-text-background, global-theme.$tint-30-text-background);
+    cursor: pointer;
+
+    &:hover, &-activated {
+      background-color: global-functions.property(opacity-15-primary, global-theme.$opacity-15-primary);
+    }
+
+    &-icon {      
+      min-width: variables.$icon-width;
+      min-height: variables.$icon-height;
+      width: variables.$icon-width;
+      height: variables.$icon-height;
+      fill: global-functions.property(tint-30-text-background, global-theme.$tint-30-text-background);
+      margin: 0 variables.$margin-horizontal;
+    }    
+  }
+}

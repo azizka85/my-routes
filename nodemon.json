@@ -1,0 +1,4 @@
+{
+  "ignore": ["public/*", "dist/*", "node_modules/*"],
+  "ext": "js, ts, ejs, scss, json"
+}

@@ -1,0 +1,125 @@
+<div data-page="signup-page">
+  <div class="main-card">
+    <div class="card main-card-body">
+      <div class="card-body">
+        <h2 
+          data-title="main"
+          style="text-transform: uppercase; font-weight: lighter;"
+        >
+          <%= helpers.tr('Sign Up') %>
+        </h2>
+        <form method="post" class="mb-1">
+          <div class="form-item mb-1">
+            <label 
+              for="name" 
+              class="form-label"            
+            >
+              <input 
+                type="text" 
+                name="name" 
+                id="name" 
+                class="form-control" 
+                placeholder="<%= helpers.tr('Name') %>*"
+                required
+              >
+              <span 
+                id="name-label"
+              >
+                <%= helpers.tr('Name') %>*
+              </span>            
+            </label>          
+          </div>
+          <div class="form-item mb-1">
+            <label 
+              for="email" 
+              class="form-label"
+            >
+              <input 
+                type="email" 
+                name="email" 
+                id="email" 
+                class="form-control" 
+                placeholder="Email*"
+                required
+              >          
+              <span>
+                Email*
+              </span>
+            </label>          
+          </div>
+          <div class="form-item mb-1">
+            <label 
+              for="password" 
+              class="form-label"            
+            >
+              <input 
+                type="password" 
+                name="password" 
+                id="password" 
+                class="form-control" 
+                placeholder="<%= helpers.tr('Password') %>*"
+                required
+              >
+              <span 
+                id="password-label"
+              >
+                <%= helpers.tr('Password') %>* 
+              </span>
+            </label>          
+          </div>
+          <div class="form-item mb-1">
+            <label 
+              for="photo" 
+              class="form-label"            
+            >
+              <input 
+                type="text" 
+                name="photo" 
+                id="photo" 
+                class="form-control" 
+                placeholder="http://"
+              >
+              <span 
+                id="photo-label"
+              >
+                <%= helpers.tr('Photo') %>
+              </span>
+            </label>          
+          </div>
+          <div style="text-align: right;" class="mb-1">
+            <a 
+              class="btn btn-light" 
+              href="<%= data.rootLink %>sign-in"
+              data-button="sign-in"
+            >
+              <%= helpers.tr('Sign In') %> 
+            </a>
+          </div>
+          <div style="text-align: right;">
+            <button 
+              type="submit" 
+              class="btn btn-success"
+              data-button="sign-up"
+            >
+              <%= helpers.tr('Sign Up') %> 
+            </button>
+            <a 
+              class="btn btn-danger" 
+              href="<%= data.rootLink %>"
+              data-button="cancel"
+            >
+              <%= helpers.tr('Cancel') %> 
+            </a>
+          </div>
+        </form>
+        <%- 
+          partials['auth-service-component']({
+            data,
+            partials,
+            helpers
+          })
+        %> 
+      </div>
+    </div>
+  </div>  
+</div>

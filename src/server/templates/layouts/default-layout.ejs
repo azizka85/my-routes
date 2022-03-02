@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="<%= data.lang %>">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= helpers.tr('My Routes') %></title>
+  <link rel='icon' type='image/png' href='<%= data.rootLink %>favicon.png'>
+  <link rel="stylesheet" href="<%= data.rootLink %>dist/<%= data.version %>/css/main.css">
+</head>
+<body>
+  <div class="splash">
+    <div class="loader" data-page="loader-page">
+      <div class="loader-container">
+        <img src="/favicon.png">
+        <div class="loader-container-progress"></div>
+      </div>
+    </div>
+  </div>
+  <script>
+    const splashElem = document.querySelector('.splash');
+
+    splashElem?.classList.add('splash-open');
+  </script>
+  <% if(data.content) { %> 
+    <%- 
+      partials[data.content]({
+        data: data.contentData,
+        partials,
+        helpers
+      }) 
+    %> 
+  <% } %>     
+  <script src="/dist/<%= data.version %>/js/main.js" type="module"></script>
+</body>
+</html>

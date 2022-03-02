@@ -1,0 +1,55 @@
+@use '../functions' as global-functions;
+
+@use '../theme' as global-theme;
+
+@use '../variables' as global-variables;
+@use './variables';
+
+.form-item {
+  display: flex;
+  color: global-functions.property(text-background, global-theme.$text-background);
+
+  &:focus-within {
+    color: global-functions.property(text-background-primary, global-theme.$text-background-primary);
+  }
+}
+
+form {
+  .form-label {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    height: variables.$height;
+    padding: 0 variables.$padding-horizontal;
+    box-sizing: border-box;
+    overflow: hidden;
+    border: 1px solid global-functions.property(text-background, global-theme.$text-background);
+    border-radius: variables.$border-radius;
+  
+    span {
+      background-color: global-functions.property(background, global-variables.$background);
+      position: absolute;
+      z-index: variables.$z-index;
+      padding: 0 variables.$label-padding-horizontal;
+      transition: transform 250ms linear;
+    }  
+  
+    &:focus-within {
+      border: 2px solid global-functions.property(text-background-primary, global-theme.$text-background-primary);
+  
+      span {
+        transform: translateY(variables.$label-translate-y) scale(variables.$label-scale);
+      }
+    }
+  }
+  
+  .form-control {
+    font-size: variables.$input-font-size;
+    border: none;
+    outline: none;
+  
+    &:not(:placeholder-shown) ~ span {
+      transform: translateY(variables.$label-translate-y) scale(variables.$label-scale);
+    }
+  }  
+}

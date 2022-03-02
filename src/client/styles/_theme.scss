@@ -1,0 +1,12 @@
+@use './functions';
+
+@use './variables';
+
+$opacity-15-primary: rgba(variables.$primary, 0.15) !default;
+$opacity-30-background: rgba(variables.$background, 0.3) !default;  
+
+$text-background: functions.accessible-ink-color(variables.$background, primary) !default;
+$tint-30-text-background: functions.tint-color($text-background, 30%) !default;
+
+$text-primary: functions.accessible-ink-color(variables.$primary, primary) !default;
+$text-background-primary: functions.accessible-ink-color(variables.$background, text-primary) !default;

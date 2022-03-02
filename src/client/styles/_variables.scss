@@ -1,0 +1,40 @@
+// declaration
+$var-prefix: 'my-routes' !default;
+
+// breakpoints
+$breakpoint-xs: 599px !default;
+$breakpoint-sm: 899px !default;
+$breakpoint-md: 1199px !default;
+$breakpoint-lg: 1799px !default;
+$breakpoint-xl: 3599px !default;
+
+// colors
+$border: #dee2e6 !default;
+$background: #fff !default;
+$primary: #6200ee !default;
+$danger: #b00020 !default;
+$success: #018786 !default;
+
+$text-colors: (
+  dark: (
+    primary: rgba(black, 0.87),
+    text-primary: $primary,
+    secondary: rgba(black, 0.54),
+    hint: rgba(black, 0.38),
+    disabled: rgba(black, 0.38),
+    icon: rgba(black, 0.38),
+  ),
+  light: (
+    primary: white,
+    text-primary: white,
+    secondary: rgba(white, 0.7),
+    hint: rgba(white, 0.5),
+    disabled: rgba(white, 0.5),
+    icon: rgba(white, 0.5),
+  ),
+) !default;
+
+// shadows
+$box-shadow-sm: 0 .125rem .25rem rgba(#000, .075) !default;
+$box-shadow: 0 .5rem 1rem rgba(#000, 0.15) !default;
+$box-shadow-lg: 0 1rem 3rem rgba(#000, .175) !default;

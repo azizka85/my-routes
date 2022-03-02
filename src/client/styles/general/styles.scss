@@ -1,0 +1,70 @@
+@use '../functions' as global-functions;
+
+@use '../theme' as global-theme;
+
+@use './variables';
+
+html, body {
+  height: 100vh;
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+[data-layout], [data-page] {
+  opacity: 1;
+  transition: opacity 250ms linear;
+
+  &.page-unmount {
+    opacity: 0;
+  }
+}
+
+.main-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;    
+
+  &-body {
+    width: variables.$main-card-width;
+    min-width: variables.$main-card-min-width;
+    margin: 
+      variables.$main-card-body-margin-top
+      variables.$main-card-body-margin-horizontal
+      variables.$main-card-body-margin-bottom;
+  }
+
+  &-service-icon {
+    width: variables.$main-card-service-icon-width;
+    height: variables.$main-card-service-icon-height;
+    color: global-functions.property(text-background, global-theme.$text-background);
+    
+    &:hover {
+      fill: global-functions.property(text-background-primary, global-theme.$text-background-primary);;
+    }
+  }
+}
+
+[data-button="scroll-top"] {
+  position: fixed;
+  bottom: variables.$btn-scroll-top-bottom;
+  right: variables.$btn-scroll-top-right;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: unset;
+  width: variables.$btn-scroll-top-width;
+  height: variables.$btn-scroll-top-height;
+  padding: unset;
+  margin: unset;
+  transform: scale(1);
+  transition: transform 250ms linear, box-shadow 250ms linear;
+
+  &.btn-exited {
+    transform: scale(0);
+  }
+}
+
+.mb-1 {
+  margin-bottom: 1rem;
+}

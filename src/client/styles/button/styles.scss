@@ -1,0 +1,56 @@
+@use '../functions' as global-functions;
+
+@use '../theme' as global-theme;
+
+@use '../variables' as global-variables;
+@use './variables';
+
+.btn {
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-transform: uppercase;
+  height: variables.$height;
+  min-width: variables.$min-width;
+  border: none;
+  outline: none;
+  user-select: none;
+  border-radius: variables.$border-radius;
+  box-shadow: global-functions.property(box-shadow-sm, global-variables.$box-shadow-sm);
+  padding: 0 variables.$padding-horizontal;
+  text-decoration: none;
+  transition: box-shadow 250ms linear;
+
+  &:hover, &:focus {
+    box-shadow: global-functions.property(box-shadow, global-variables.$box-shadow);
+  }
+
+  &:active {
+    box-shadow: global-functions.property(box-shadow-lg, global-variables.$box-shadow-lg);
+  }
+
+  &:disabled {
+    box-shadow: none;
+  }
+
+  &-light {
+    background-color: global-functions.property(background, global-variables.$background);
+    color: global-functions.property(text-background-primary, global-theme.$text-background-primary);
+  }
+
+  &-primary {
+    background-color: global-functions.property(primary, global-variables.$primary);
+    color: global-functions.property(text-primary, global-theme.$text-primary);
+  }
+
+  &-success {
+    background-color: global-functions.property(success, global-variables.$success);
+    color: global-functions.property(text-primary, global-theme.$text-primary);
+  }
+
+  &-danger {
+    background-color: global-functions.property(danger, global-variables.$danger);
+    color: global-functions.property(text-primary, global-theme.$text-primary);
+  }
+}

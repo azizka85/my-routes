@@ -1,0 +1,31 @@
+@use '../functions' as global-functions;
+
+@use '../theme' as global-theme;
+
+@use '../variables' as global-variables;
+@use './variables';
+
+.card {
+  display: flex;
+  flex-direction: column;
+  background-color: global-functions.property(background, global-variables.$background);
+  border: 
+    1px 
+    solid 
+    global-functions.property(border, global-variables.$border);
+  border-radius: variables.$border-radius;
+  box-shadow: global-functions.property(box-shadow-sm, global-variables.$box-shadow-sm);   
+  transition: box-shadow 250ms linear;
+
+  &:hover {
+    box-shadow: global-functions.property(box-shadow, global-variables.$box-shadow);   
+  }
+
+  &-body {
+    flex: 1 1 auto;
+    padding: 
+      variables.$padding-vertical
+      variables.$padding-horizontal;
+    color: global-functions.property(text-background-primary, global-theme.$text-background-primary); 
+  }
+}

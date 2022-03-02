@@ -1,0 +1,76 @@
+@use '../functions' as global-functions;
+
+@use '../theme' as global-theme;
+
+@use '../variables' as global-variables;
+@use './variables';
+
+.app-bar {
+  background-color: global-functions.property(primary, global-variables.$primary);
+  color: global-functions.property(text-primary, global-theme.$text-primary);
+
+  width: 100%;
+  position: fixed;
+  box-sizing: border-box;
+  z-index: variables.$z-index;
+  transform: translateY(0);
+  transition: transform 250ms linear, box-shadow 250ms linear;
+
+  &-hide {
+    transform: translateY(-100%);
+  }
+
+  &-scrolled {
+    box-shadow: global-functions.property(box-shadow, global-variables.$box-shadow);
+  }
+
+  &-fixed-adjust {
+    padding: (variables.$row-height + variables.$row-padding) 
+      variables.$row-padding 
+      variables.$row-padding 
+      variables.$row-padding;
+  }
+
+  &-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: variables.$row-height;        
+  }  
+
+  &-section {
+    display: inline-flex;
+    align-items: center;
+
+    &-align-start {
+      justify-content: flex-start;
+      order: -1;
+    }
+
+    &-align-end {
+      justify-content: flex-end;
+      order: 1;
+    }
+
+    &-fill {
+      justify-content: center;
+      flex: 1 1 auto;          
+    }
+  }
+
+  &-title {
+    font-size: variables.$title-font-size;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  &-icon {
+    width: variables.$icon-width;
+    height: variables.$icon-height;
+    fill: global-functions.property(text-primary, global-theme.$text-primary);
+    margin: 
+      variables.$icon-vertical-margin 
+      variables.$icon-horizontal-margin;
+  }
+}

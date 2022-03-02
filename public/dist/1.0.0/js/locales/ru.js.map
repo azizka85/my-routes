@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../../../../src/locales/ru.ts"],
+  "sourcesContent": ["export default {\n  values: {\n    \"Catalog of Services\": \"\u041A\u0430\u0442\u0430\u043B\u043E\u0433 \u0443\u0441\u043B\u0443\u0433\",\n    \"Sign In\": \"\u0412\u043E\u0439\u0442\u0438\",\n    \"Sign Up\": \"\u0420\u0435\u0433\u0438\u0441\u0442\u0440\u0430\u0446\u0438\u044F\",\n    \"Sign In/Up\": \"\u0412\u043E\u0439\u0442\u0438 \u0438\u043B\u0438 \u0417\u0430\u0440\u0435\u0433\u0438\u0441\u0442\u0440\u0438\u0440\u043E\u0432\u0430\u0442\u044C\u0441\u044F\",\n    \"Sign Out\": \"\u0412\u044B\u0439\u0442\u0438\",\n    \"Name\": \"\u0418\u043C\u044F\",\n    \"Password\": \"\u041F\u0430\u0440\u043E\u043B\u044C\",    \n    \"Cancel\": \"\u041E\u0442\u043C\u0435\u043D\u0430\",\n    \"Photo\": \"\u0424\u043E\u0442\u043E\",\n    \"Or use the service\": \"\u0418\u043B\u0438 \u0438\u0441\u043F\u043E\u043B\u044C\u0437\u0443\u0439\u0442\u0435 \u0441\u0435\u0440\u0432\u0438\u0441\",\n    \"Auth service\": \"\u0421\u0435\u0440\u0432\u0438\u0441 \u0430\u0443\u0442\u0435\u043D\u0442\u0438\u0444\u0438\u043A\u0430\u0446\u0438\u0438\"\n  }\n};\n"],
+  "mappings": ";;;AAAA,IAAO,aAAQ;AAAA,EACb,QAAQ;AAAA,IACN,uBAAuB;AAAA,IACvB,WAAW;AAAA,IACX,WAAW;AAAA,IACX,cAAc;AAAA,IACd,YAAY;AAAA,IACZ,QAAQ;AAAA,IACR,YAAY;AAAA,IACZ,UAAU;AAAA,IACV,SAAS;AAAA,IACT,sBAAsB;AAAA,IACtB,gBAAgB;AAAA;AAAA;",
+  "names": []
+}

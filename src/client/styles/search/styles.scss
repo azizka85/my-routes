@@ -1,0 +1,93 @@
+@use '../functions' as global-functions;
+
+@use '../theme' as global-theme;
+
+@use '../variables' as global-variables;
+@use '../app-bar/variables' as app-bar-variables;
+@use './variables';
+
+.search { 
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: variables.$top;
+  height: variables.$height;
+  width: calc(100% - variables.$margin-max);
+  max-width: variables.$max-width;
+  padding: variables.$padding;
+  margin: auto;
+  border-radius: variables.$border-radius;  
+  background-color: global-functions.property(opacity-30-background, global-theme.$opacity-30-background);
+  transition: 
+    color 250ms linear, 
+    background-color 250ms linear, 
+    width 250ms linear,
+    box-shadow 250ms linear,
+    height 250ms linear;    
+
+  form {
+    height: variables.$height;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;    
+  }
+
+  &-input {
+    height: variables.$height;
+    box-sizing: border-box;
+    flex: 1;
+    color: inherit;
+    background-color: rgba(#000000, 0);
+    border: none;
+    outline: none;
+  }
+
+  &-icon {
+    width: variables.$icon-size;
+    height: variables.$icon-size;           
+
+    &-left {
+      order: -1;      
+      display: none;
+      cursor: pointer;
+      margin: 
+        variables.$icon-margin-vertical
+        variables.$icon-margin-horizontal; 
+    }
+
+    &-right {
+      order: 1;     
+      display: none; 
+      cursor: pointer;
+      margin: 
+        variables.$icon-margin-vertical
+        variables.$icon-margin-horizontal; 
+    }
+  }   
+
+  &-list {
+    height: 0;
+    overflow-y: hidden;    
+  }
+
+  &-focus {
+    color: global-functions.property(text-background, global-theme.$text-background);
+    background-color: global-functions.property(background, global-variables.$background); 
+    box-shadow: global-functions.property(box-shadow, global-variables.$box-shadow);
+    width: calc(100% - variables.$margin-min);
+    height: calc(variables.$height + variables.$list-height);
+    z-index: app-bar-variables.$z-index + 5;
+
+    .search-icon {
+      fill: global-functions.property(text-background, global-theme.$text-background);  
+
+      &-left, &-right {
+        display: block;
+      }
+    }
+
+    .search-list {
+      height: variables.$list-height;
+    }
+  }
+}

@@ -1,0 +1,26 @@
+@use '../functions' as global-functions;
+
+@use '../variables' as global-variables;
+@use './variables';
+
+.splash {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: variables.$back-z-index;
+  display: flex;
+  align-items: center;
+  justify-content: center;  
+  background-color: global-functions.property(background, global-variables.$background);
+  opacity: 0;
+  transition: 
+    z-index 250ms linear,
+    opacity 250ms linear;
+
+  &-open {
+    z-index: variables.$front-z-index;
+    opacity: 1;
+  }
+}

@@ -1,0 +1,72 @@
+@use 'sass:math';
+@use 'sass:map';
+@use 'sass:color';
+
+@use './variables';
+
+@function property($key, $value){
+  @return var(--#{variables.$var_prefix}-#{$key}, $value);
+}
+
+@function linear-channel-value($channel-value) {
+  $normalized-channel-value: math.div($channel-value, 255);
+  @if $normalized-channel-value < 0.03928 {
+    @return math.div($normalized-channel-value, 12.92);
+  }
+
+  @return math.pow(math.div($normalized-channel-value + 0.055, 1.055), 2.4);
+}
+
+@function luminance($color) {
+  $red: linear-channel-value(color.red($color));
+  $green: linear-channel-value(color.green($color));
+  $blue: linear-channel-value(color.blue($color));
+
+  @return 0.2126 * $red + 0.7152 * $green + 0.0722 * $blue;
+}
+
+@function contrast($back, $front) {
+  $backLum: luminance($back) + 0.05;
+  $foreLum: luminance($front) + 0.05;
+
+  @return math.div(math.max($backLum, $foreLum), math.min($backLum, $foreLum));
+}
+
+@function tone($color) {
+  @if $color == 'dark' or $color == 'light' {
+    @return $color;
+  }
+
+  $minimumContrast: 3.1;
+
+  $lightContrast: contrast($color, white);
+  $darkContrast: contrast($color, rgba(black, 0.87));
+
+  @if ($lightContrast < $minimumContrast) and ($darkContrast > $lightContrast) {
+    @return 'light';
+  } @else {
+    @return 'dark';
+  }
+}
+
+@function contrast-tone($color) {
+  @return if(tone($color) == 'dark', 'light', 'dark');
+}
+
+@function accessible-ink-color($fill-color, $text-style: primary) {
+  $color-map-for-tone: map.get(variables.$text-colors, contrast-tone($fill-color));
+
+  @if not map.has-key($color-map-for-tone, $text-style) {
+    @error "Invalid $text-style: '#{$text-style}'. Choose one of: #{map.keys($color-map-for-tone)}";
+  }
+
+  @return map.get($color-map-for-tone, $text-style);
+}
+
+@function tint-color($color, $weight) {
+  @return color.mix(white, $color, $weight);
+}
+
+@function shade-color($color, $weight) {
+  @return color.mix(black, $color, $weight);
+}

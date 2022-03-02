@@ -1,0 +1,50 @@
+// elevation
+$z-index: 20 !default;
+$under-app-bar-z-index: 5 !default;
+
+// sizes
+$width: 18rem !default;
+$min-width: 3.5rem !default;
+
+$icon-width: 2rem !default;
+$icon-height: 2rem !default;
+
+$avatar-min-size: 2.5rem !default;
+$avatar-size: 4rem !default;
+$account-actions-max-height: 6rem !default;
+
+$lang-bar-list-max-height: 10rem !default;
+
+$lang-bar-icon-width: 1rem !default;
+$lang-bar-icon-height: 1rem !default;
+
+$lang-bar-flag-width: 1.5rem !default;
+$lang-bar-flag-height: 1.5rem !default;
+
+$lang-bar-current-progress-width: 0.5rem !default;
+$lang-bar-current-progress-height: 0.5rem !default;
+
+$lang-bar-current-progress-border-width: 0.25rem !default;
+
+// margin & padding
+$icon-margin-vertical: 0;
+$icon-margin-horizontal: 0.75rem;
+
+$lang-bar-margin-top: 0.5rem !default;
+$lang-bar-margin-bottom: -0.5rem !default;
+$lang-bar-margin-horizontal: 0 !default;
+
+$account-bar-margin-top: 0 !default;
+$account-bar-margin-bottom: -0.5rem !default;
+$account-bar-margin-horizontal: 0 !default;
+
+$account-bar-padding-vertical: 1.5rem !default;
+$account-bar-padding-horizontal: 0.5rem !default;
+
+$account-bar-action-margin-top: 1rem !default;
+
+// position
+$lang-list-top: 1.5rem;
+
+// animation
+$lang-bar-current-progress-animation-period: 1s;

@@ -1,0 +1,34 @@
+@use '../functions' as global-functions;
+
+@use '../variables' as global-variables;
+@use './variables';
+
+.loader {
+  display: flex;  
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;  
+
+  &-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-x: hidden;
+
+    @keyframes loader-container-progress {
+      to { transform: translateX(150%); }
+    }
+
+    &-progress {
+      width: 50%;
+      transform: translateX(-150%);
+      box-sizing: border-box;
+      border: 
+        variables.$progress-border-width 
+        solid
+        global-functions.property(primary, global-variables.$primary);
+      animation: variables.$progress-animation-period linear infinite loader-container-progress;
+    }
+  }
+}

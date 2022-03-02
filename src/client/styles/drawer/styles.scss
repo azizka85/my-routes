@@ -1,0 +1,291 @@
+@use '../functions' as global-functions;
+
+@use '../theme' as global-theme;
+
+@use '../variables' as global-variables;
+@use '../app-bar/variables' as app-bar-variables;
+@use '../list/variables' as list-variables;
+@use './variables';
+
+.drawer {
+  z-index: variables.$z-index;  
+
+  background-color: global-functions.property(background, global-variables.$background);
+  
+  position: fixed;
+  top: 0;
+  left: 0; 
+  width: 0;
+  border-color: global-functions.property(border, global-variables.$border);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  height: 100vh;
+  overflow: hidden;    
+  transition: width 250ms linear, box-shadow 250ms linear;
+
+  &-open {
+    width: 100%;
+  }
+
+  &-open, &-hover, &-hoverable:hover {
+    .drawer-header {
+      color: global-functions.property(text-primary, global-theme.$text-primary);
+      background-color: global-functions.property(primary, global-variables.$primary);
+
+      &-icon {
+        fill: global-functions.property(text-primary, global-theme.$text-primary);
+      }
+    }
+
+    .drawer-account-bar {
+      background-color: global-functions.property(primary, global-variables.$primary);
+
+      &-avatar {
+        width: variables.$avatar-size;
+        height: variables.$avatar-size;
+
+        &-icon {
+          width: variables.$avatar-size;
+          height: variables.$avatar-size;
+        }
+
+        &-photo {
+          width: variables.$avatar-size;
+          height: variables.$avatar-size;
+        }
+      }
+
+      &-actions {
+        max-height: variables.$account-actions-max-height;         
+        
+        a {
+          color: global-functions.property(text-primary, global-theme.$text-primary);
+        }
+      }
+    }    
+  }
+
+  &-content {    
+    height: 100vh;
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }  
+
+  &-header {
+    height: app-bar-variables.$row-height;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    color: global-functions.property(text-background, global-theme.$text-background);
+    background-color: global-functions.property(background, global-variables.$background);
+    transition: 
+      color 250ms linear,
+      background-color 250ms linear;
+
+    &-icon {
+      width: variables.$icon-width;
+      height: variables.$icon-height;
+      fill: global-functions.property(text-background, global-theme.$text-background);
+      margin: 
+        variables.$icon-margin-vertical
+        variables.$icon-margin-horizontal;
+      transform: rotate(0deg);
+      transition: transform 250ms linear;
+
+      &-hide {
+        transform: rotate(180deg);
+      }
+    }
+  }
+
+  &-account-bar {
+    display: flex;
+    flex-direction: column;
+    margin: 
+      variables.$account-bar-margin-top
+      variables.$account-bar-margin-horizontal
+      variables.$account-bar-margin-bottom;
+    padding: 
+      variables.$account-bar-padding-vertical
+      variables.$account-bar-padding-horizontal;
+    overflow: hidden;
+    background-color: global-functions.property(background, global-variables.$background);
+    transition: background-color 250ms linear;
+    
+    &-avatar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: variables.$avatar-min-size;
+      height: variables.$avatar-min-size;
+      border-radius: 50%;      
+      background-color: global-functions.property(background, global-variables.$background);
+      transition: 
+        width 250ms linear,
+        height 250ms linear;
+
+      &-icon {
+        opacity: 0.3;
+        fill: global-functions.property(text-background, global-theme.$text-background);
+        width: variables.$avatar-min-size;
+        height: variables.$avatar-min-size;
+        transition: 
+          width 250ms linear,
+          height 250ms linear;
+      }
+
+      &-photo {
+        border-radius: 50%;     
+        width: variables.$avatar-min-size;
+        height: variables.$avatar-min-size;
+        transition: 
+          width 250ms linear,
+          height 250ms linear;
+      }
+    }
+    
+    &-actions {
+      display: flex;
+      flex-direction: column; 
+      max-height: 0;             
+      transition: max-height 250ms linear;
+
+      a {
+        margin-top: variables.$account-bar-action-margin-top;
+        text-decoration: none;
+        font-weight: bold;
+        color: global-functions.property(text-background, global-theme.$text-background);
+        overflow: hidden;
+        transition: color 250ms linear;
+      }
+    }
+  }
+
+  &-lang-bar {
+    display: flex;
+    align-items: center;
+    height: list-variables.$line-height;
+    margin: 
+      variables.$lang-bar-margin-top
+      variables.$lang-bar-margin-horizontal
+      variables.$lang-bar-margin-bottom;
+    cursor: pointer;
+
+    &-flag {
+      width: variables.$lang-bar-flag-width;
+      height: variables.$lang-bar-flag-height;
+      margin: 0 list-variables.$margin-horizontal;
+    }  
+
+    label {
+      position: relative;
+      cursor: pointer;
+
+      input {
+        top: 0;
+        left: 0;
+        width: 0;
+        height: 0;
+        position: absolute;        
+      }
+
+      .drawer-lang-bar-current {
+        display: flex;
+        align-items: center;
+  
+        .drawer-lang-bar-current-icon {
+          width: variables.$lang-bar-icon-width;
+          height: variables.$lang-bar-icon-height;
+          fill: global-functions.property(tint-30-text-background, global-theme.$tint-30-text-background);          
+          margin-left: list-variables.$margin-horizontal;
+          transform: rotate(0deg);
+          transition: transform 250ms linear;
+        }
+
+        @keyframes drawer-lang-bar-current-progress {
+          to { transform: rotate(360deg); }
+        }
+
+        .drawer-lang-bar-current-progress {
+          width: variables.$lang-bar-current-progress-width;
+          height: variables.$lang-bar-current-progress-height;
+          margin-left: list-variables.$margin-horizontal;
+          border: 
+            variables.$lang-bar-current-progress-border-width 
+            solid 
+            global-functions.property(primary, global-variables.$primary);
+          border-right-color: transparent;
+          border-radius: 50%;
+          animation: variables.$lang-bar-current-progress-animation-period linear infinite drawer-lang-bar-current-progress;
+          display: none;
+        }
+
+        &-loading {
+          .drawer-lang-bar-current-icon {
+            display: none;
+          }
+
+          .drawer-lang-bar-current-progress {
+            display: block;
+          }
+        }
+      }
+
+      input:checked ~ .drawer-lang-bar-current .drawer-lang-bar-current-icon {
+        transform: rotate(-180deg);
+      }
+
+      .list {
+        background-color: global-functions.property(background, global-variables.$background);
+        position: absolute;
+        top: variables.$lang-list-top;
+        z-index: variables.$z-index + 1;
+        max-height: 0;
+        opacity: 0;
+        transition: max-height 250ms linear, opacity 250ms linear;
+        overflow: hidden;
+
+        &-item {
+          padding-right: list-variables.$margin-horizontal;
+        }
+      }
+
+      input:checked ~ .list {
+        max-height: variables.$lang-bar-list-max-height;
+        opacity: 1;
+        box-shadow: global-functions.property(box-shadow, global-variables.$box-shadow);        
+      }
+    }
+  }
+}
+
+// laptop
+@media screen and (min-width: (global-variables.$breakpoint-sm + 1px)) {
+  .drawer {
+    z-index: variables.$under-app-bar-z-index;
+    width: variables.$min-width;
+    border-right-width: 1px;
+    border-right-style: solid;  
+
+    &-hover:not(&-open), &-hoverable:hover:not(&-open) {
+      box-shadow: global-functions.property(box-shadow, global-variables.$box-shadow);   
+    }
+
+    &-open, &-hover, &-hoverable:hover {
+      width: variables.$width;
+    }
+
+    &-open ~ .main-content {
+      margin-left: variables.$width;
+    }
+  }
+
+  .main-content {
+    margin-left: variables.$min-width;
+  
+    transition: margin-left 250ms linear;
+  }
+}
