@@ -108,11 +108,6 @@ export async function loadPage(
     languages[lang] = Translator.create(module.default);
   }
 
-  context.tr = languages[lang].translate.bind(languages[lang]);
-
-  document.documentElement.lang = lang;
-  document.title = context.tr('My Routes');
-
   if(!(name in views)) {       
     const module = await import(`./views/${name}.js?time=${Date.now()}`) as any;
 
@@ -126,6 +121,11 @@ export async function loadPage(
   const firstLoad = await initLayouts(layouts, parent, firstTime);
 
   if(context.page.fragment === page.fragment) {
+    context.tr = languages[lang].translate.bind(languages[lang]);
+
+    document.documentElement.lang = lang;
+    document.title = context.tr('My Routes');
+    
     const layout = await loadLayouts(lang, page, layouts, firstLoad);    
 
     if(layout['content'] !== views[name]) {
