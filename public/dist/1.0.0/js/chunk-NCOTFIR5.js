@@ -3,7 +3,7 @@ import {
   mount,
   require_router,
   unmount
-} from "./chunk-PW6ZC55L.js";
+} from "./chunk-L5HFSNW6.js";
 import {
   __toESM
 } from "./chunk-U3RQVIYY.js";
@@ -80,4 +80,4 @@ export {
   localeRoute,
   changeLangPath
 };
-//# sourceMappingURL=chunk-MGPZ2ZF7.js.map
+//# sourceMappingURL=chunk-NCOTFIR5.js.map

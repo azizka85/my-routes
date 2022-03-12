@@ -19,6 +19,7 @@
   "license": "MIT",
   "devDependencies": {
     "@azizka/i18n": "^1.0.1",
+    "@azizka/promise-queue": "^1.0.0",
     "@azizka/router": "^1.2.0",
     "@babel/core": "^7.17.5",
     "@babel/preset-env": "^7.16.11",

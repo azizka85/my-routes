@@ -2,7 +2,7 @@ import {
   BaseLayout,
   localeRoute,
   toCamel
-} from "./chunk-MGPZ2ZF7.js";
+} from "./chunk-NCOTFIR5.js";
 import {
   DEFAULT_LANGUAGE,
   context,
@@ -12,11 +12,67 @@ import {
   routeNavigator,
   router,
   views
-} from "./chunk-PW6ZC55L.js";
+} from "./chunk-L5HFSNW6.js";
 import {
+  __commonJS,
   __publicField,
   __toESM
 } from "./chunk-U3RQVIYY.js";
+
+// node_modules/@azizka/promise-queue/src/promise-queue.js
+var require_promise_queue = __commonJS({
+  "node_modules/@azizka/promise-queue/src/promise-queue.js"(exports, module) {
+    var PromiseQueue2 = class {
+      queueStarted = false;
+      tasks = [];
+      started;
+      finished;
+      taskFinished;
+      constructor(started, finished, taskFinished) {
+        this.started = started;
+        this.finished = finished;
+        this.taskFinished = taskFinished;
+      }
+      async start() {
+        if (!this.queueStarted) {
+          this.queueStarted = true;
+          this.started?.();
+          let data;
+          while (this.tasks.length > 0) {
+            const task = this.tasks.splice(0, 1)[0];
+            data = await task(data);
+            this.taskFinished?.(data);
+          }
+          this.queueStarted = false;
+          this.finished?.();
+        }
+      }
+      addTask(func) {
+        this.tasks.push(func);
+        this.start();
+      }
+      stop() {
+        this.tasks = [];
+      }
+    };
+    module.exports = {
+      PromiseQueue: PromiseQueue2
+    };
+  }
+});
+
+// node_modules/@azizka/promise-queue/index.js
+var require_promise_queue2 = __commonJS({
+  "node_modules/@azizka/promise-queue/index.js"(exports, module) {
+    var { PromiseQueue: PromiseQueue2 } = require_promise_queue();
+    module.exports = {
+      PromiseQueue: PromiseQueue2
+    };
+  }
+});
+
+// src/client/main.ts
+var import_promise_queue = __toESM(require_promise_queue2());
 
 // src/client/views/pages/loader-page.ts
 var _LoaderPage = class {
@@ -94,60 +150,128 @@ async function loadLayouts(lang, page, layouts2, firstLoad) {
   }
   return parentLayout;
 }
-async function loadPage(lang, page, name, layouts2, firstTime) {
-  context.page = page;
+function loadPage(queue2, lang, page, name, layouts2, firstTime) {
   let parent = null;
   let pageFirstLoad = false;
-  if (!firstTime && (!(lang in languages) || !(name in views))) {
-    const layout = getExistingLayout(layouts2);
-    if (layout["content"] !== LoaderPage.instance) {
-      await layout.replaceContent(LoaderPage.instance);
+  queue2.addTask(async () => {
+    if (!firstTime && (!(lang in languages) || !(name in views))) {
+      const layout = getExistingLayout(layouts2);
+      if (layout["content"] !== LoaderPage.instance) {
+        await layout.replaceContent(LoaderPage.instance);
+      }
     }
-  }
-  if (!(lang in languages)) {
-    const module = await import(`./locales/${lang}.js?time=${Date.now()}`);
-    languages[lang] = import_i18n.Translator.create(module.default);
-  }
-  context.tr = languages[lang].translate.bind(languages[lang]);
-  document.documentElement.lang = lang;
-  document.title = context.tr("Catalog of Services");
-  if (!(name in views)) {
-    const module = await import(`./views/${name}.js?time=${Date.now()}`);
-    parent = await module[toCamel(name)]?.instance?.init?.(parent, firstTime);
-    views[name] = module[toCamel(name)]?.instance;
-    pageFirstLoad = true;
-  }
-  const firstLoad = await initLayouts(layouts2, parent, firstTime);
-  if (context.page.fragment === page.fragment) {
-    const layout = await loadLayouts(lang, page, layouts2, firstLoad);
-    if (layout["content"] !== views[name]) {
-      await layout.replaceContent(views[name]);
+    return {
+      status: 1 /* completed */
+    };
+  });
+  queue2.addTask(async (data) => {
+    if ((!data || data.status === 1 /* completed */) && !(lang in languages)) {
+      try {
+        const module = await import(`./locales/${lang}.js?time=${Date.now()}`);
+        languages[lang] = import_i18n.Translator.create(module.default);
+        data = {
+          status: 1 /* completed */
+        };
+      } catch (err) {
+        data = {
+          status: 0 /* error */,
+          data: err
+        };
+      }
     }
-    await views[name].load?.(lang, page, pageFirstLoad);
-  }
-  if (firstTime) {
-    hideSplash();
-  }
+    return data;
+  });
+  queue2.addTask(async (data) => {
+    if ((!data || data.status === 1 /* completed */) && !(name in views)) {
+      try {
+        const module = await import(`./views/${name}.js?time=${Date.now()}`);
+        parent = await module[toCamel(name)]?.instance?.init?.(parent, firstTime);
+        views[name] = module[toCamel(name)]?.instance;
+        pageFirstLoad = true;
+        data = {
+          status: 1 /* completed */
+        };
+      } catch (err) {
+        data = {
+          status: 0 /* error */,
+          data: err
+        };
+      }
+    }
+    return data;
+  });
+  let firstLoad = {};
+  queue2.addTask(async (data) => {
+    if (!data || data.status === 1 /* completed */) {
+      try {
+        firstLoad = await initLayouts(layouts2, parent, firstTime);
+        data = {
+          status: 1 /* completed */
+        };
+      } catch (err) {
+        data = {
+          status: 0 /* error */,
+          data: err
+        };
+      }
+    }
+    return data;
+  });
+  queue2.addTask(async (data) => {
+    if (!data || data.status === 1 /* completed */) {
+      try {
+        context.tr = languages[lang].translate.bind(languages[lang]);
+        document.documentElement.lang = lang;
+        document.title = context.tr("My Routes");
+        const layout = await loadLayouts(lang, page, layouts2, firstLoad);
+        if (layout["content"] !== views[name]) {
+          await layout.replaceContent(views[name]);
+        }
+        await views[name].load?.(lang, page, pageFirstLoad);
+        data = {
+          status: 1 /* completed */
+        };
+      } catch (err) {
+        data = {
+          status: 0 /* error */,
+          data: err
+        };
+      }
+    }
+    return data;
+  });
+  queue2.addTask(async (data) => {
+    if (firstTime) {
+      hideSplash();
+    }
+    if (data?.status === 0 /* error */) {
+      console.error(data.data);
+    }
+  });
 }
 
 // src/client/main.ts
+var queue = new import_promise_queue.PromiseQueue();
 window.addEventListener("DOMContentLoaded", () => {
   let firstTime = true;
   LoaderPage.instance.init(null, firstTime);
   router.addRoutes([{
     rule: `${localeRoute}/?`,
     async handler(page) {
-      await loadPage(page.match?.[0] || DEFAULT_LANGUAGE, page, "home-page", ["main-layout"], firstTime);
+      queue.stop();
+      await loadPage(queue, page.match?.[0] || DEFAULT_LANGUAGE, page, "home-page", ["main-layout"], firstTime);
     }
   }, {
     rule: `${localeRoute}/?sign-in`,
     async handler(page) {
-      await loadPage(page.match?.[0] || DEFAULT_LANGUAGE, page, "sign-in-page", [], firstTime);
+      queue.stop();
+      await loadPage(queue, page.match?.[0] || DEFAULT_LANGUAGE, page, "sign-in-page", [], firstTime);
     }
   }, {
     rule: `${localeRoute}/?sign-up`,
     async handler(page) {
-      await loadPage(page.match?.[0] || DEFAULT_LANGUAGE, page, "sign-up-page", [], firstTime);
+      queue.stop();
+      await loadPage(queue, page.match?.[0] || DEFAULT_LANGUAGE, page, "sign-up-page", [], firstTime);
     }
   }]);
   routeNavigator.addUriListener();

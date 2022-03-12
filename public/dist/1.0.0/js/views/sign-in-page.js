@@ -1,12 +1,12 @@
 import {
   AuthServiceComponent
-} from "../chunk-RELP3E3Z.js";
+} from "../chunk-RLRVPLKC.js";
 import {
   DEFAULT_LANGUAGE,
   context,
   loadContent,
   navigateHandler
-} from "../chunk-PW6ZC55L.js";
+} from "../chunk-L5HFSNW6.js";
 import {
   __publicField
 } from "../chunk-U3RQVIYY.js";

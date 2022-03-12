@@ -1,7 +1,7 @@
 {
   "version": 3,
   "sources": ["../../../../../src/locales/en.ts"],
-  "sourcesContent": ["export default {\n  values: {\n    \"Catalog of Services\": \"Catalog of Services\",\n    \"Sign In\": \"Sign In\",\n    \"Sign Up\": \"Sign Up\",\n    \"Sign In/Up\": \"Sign In/Up\",\n    \"Sign Out\": \"Sign Out\",\n    \"Name\": \"Name\",\n    \"Password\": \"Password\",    \n    \"Photo\": \"Photo\",\n    \"Cancel\": \"Cancel\",\n    \"Or use the service\": \"Or use the service\",\n    \"Auth service\": \"Auth service\"\n  }\n};\n"],
-  "mappings": ";;;AAAA,IAAO,aAAQ;AAAA,EACb,QAAQ;AAAA,IACN,uBAAuB;AAAA,IACvB,WAAW;AAAA,IACX,WAAW;AAAA,IACX,cAAc;AAAA,IACd,YAAY;AAAA,IACZ,QAAQ;AAAA,IACR,YAAY;AAAA,IACZ,SAAS;AAAA,IACT,UAAU;AAAA,IACV,sBAAsB;AAAA,IACtB,gBAAgB;AAAA;AAAA;",
+  "sourcesContent": ["export default {\r\n  values: {\r\n    \"My Routes\": \"My Routes\",\r\n    \"Sign In\": \"Sign In\",\r\n    \"Sign Up\": \"Sign Up\",\r\n    \"Sign In/Up\": \"Sign In/Up\",\r\n    \"Sign Out\": \"Sign Out\",\r\n    \"Name\": \"Name\",\r\n    \"Password\": \"Password\",    \r\n    \"Photo\": \"Photo\",\r\n    \"Cancel\": \"Cancel\",\r\n    \"Or use the service\": \"Or use the service\",\r\n    \"Auth service\": \"Auth service\"\r\n  }\r\n};\r\n"],
+  "mappings": ";;;AAAA,IAAO,aAAQ;AAAA,EACb,QAAQ;AAAA,IACN,aAAa;AAAA,IACb,WAAW;AAAA,IACX,WAAW;AAAA,IACX,cAAc;AAAA,IACd,YAAY;AAAA,IACZ,QAAQ;AAAA,IACR,YAAY;AAAA,IACZ,SAAS;AAAA,IACT,UAAU;AAAA,IACV,sBAAsB;AAAA,IACtB,gBAAgB;AAAA,EAClB;AACF;",
   "names": []
 }

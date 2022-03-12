@@ -1,6 +1,6 @@
 .app-bar {
-  background-color: var(--dashboard-primary, #0d6efd);
-  color: var(--dashboard-text-primary, white);
+  background-color: var(--my-routes-primary, #6200ee);
+  color: var(--my-routes-text-primary, white);
   width: 100%;
   position: fixed;
   box-sizing: border-box;
@@ -12,7 +12,7 @@
   transform: translateY(-100%);
 }
 .app-bar-scrolled {
-  box-shadow: var(--dashboard-box-shadow, 0 0.5rem 1rem rgba(0, 0, 0, 0.15));
+  box-shadow: var(--my-routes-box-shadow, 0 0.5rem 1rem rgba(0, 0, 0, 0.15));
 }
 .app-bar-fixed-adjust {
   padding: 4.5rem 0.5rem 0.5rem 0.5rem;
@@ -48,18 +48,18 @@
 .app-bar-icon {
   width: 2rem;
   height: 2rem;
-  fill: var(--dashboard-text-primary, white);
+  fill: var(--my-routes-text-primary, white);
   margin: 0 1rem;
 }
 
 .drawer {
   z-index: 20;
-  background-color: var(--dashboard-background, #fff);
+  background-color: var(--my-routes-background, #fff);
   position: fixed;
   top: 0;
   left: 0;
   width: 0;
-  border-color: var(--dashboard-border, #dee2e6);
+  border-color: var(--my-routes-border, #dee2e6);
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
@@ -72,14 +72,14 @@
   width: 100%;
 }
 .drawer-open .drawer-header, .drawer-hover .drawer-header, .drawer-hoverable:hover .drawer-header {
-  color: var(--dashboard-text-primary, white);
-  background-color: var(--dashboard-primary, #0d6efd);
+  color: var(--my-routes-text-primary, white);
+  background-color: var(--my-routes-primary, #6200ee);
 }
 .drawer-open .drawer-header-icon, .drawer-hover .drawer-header-icon, .drawer-hoverable:hover .drawer-header-icon {
-  fill: var(--dashboard-text-primary, white);
+  fill: var(--my-routes-text-primary, white);
 }
 .drawer-open .drawer-account-bar, .drawer-hover .drawer-account-bar, .drawer-hoverable:hover .drawer-account-bar {
-  background-color: var(--dashboard-primary, #0d6efd);
+  background-color: var(--my-routes-primary, #6200ee);
 }
 .drawer-open .drawer-account-bar-avatar, .drawer-hover .drawer-account-bar-avatar, .drawer-hoverable:hover .drawer-account-bar-avatar {
   width: 4rem;
@@ -97,7 +97,7 @@
   max-height: 6rem;
 }
 .drawer-open .drawer-account-bar-actions a, .drawer-hover .drawer-account-bar-actions a, .drawer-hoverable:hover .drawer-account-bar-actions a {
-  color: var(--dashboard-text-primary, white);
+  color: var(--my-routes-text-primary, white);
 }
 .drawer-content {
   height: 100vh;
@@ -110,14 +110,14 @@
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  color: var(--dashboard-text-background, rgba(0, 0, 0, 0.87));
-  background-color: var(--dashboard-background, #fff);
+  color: var(--my-routes-text-background, rgba(0, 0, 0, 0.87));
+  background-color: var(--my-routes-background, #fff);
   transition: color 250ms linear, background-color 250ms linear;
 }
 .drawer-header-icon {
   width: 2rem;
   height: 2rem;
-  fill: var(--dashboard-text-background, rgba(0, 0, 0, 0.87));
+  fill: var(--my-routes-text-background, rgba(0, 0, 0, 0.87));
   margin: 0 0.75rem;
   transform: rotate(0deg);
   transition: transform 250ms linear;
@@ -131,7 +131,7 @@
   margin: 0 0 -0.5rem;
   padding: 1.5rem 0.5rem;
   overflow: hidden;
-  background-color: var(--dashboard-background, #fff);
+  background-color: var(--my-routes-background, #fff);
   transition: background-color 250ms linear;
 }
 .drawer-account-bar-avatar {
@@ -141,12 +141,12 @@
   width: 2.5rem;
   height: 2.5rem;
   border-radius: 50%;
-  background-color: var(--dashboard-background, #fff);
+  background-color: var(--my-routes-background, #fff);
   transition: width 250ms linear, height 250ms linear;
 }
 .drawer-account-bar-avatar-icon {
   opacity: 0.3;
-  fill: var(--dashboard-text-background, rgba(0, 0, 0, 0.87));
+  fill: var(--my-routes-text-background, rgba(0, 0, 0, 0.87));
   width: 2.5rem;
   height: 2.5rem;
   transition: width 250ms linear, height 250ms linear;
@@ -167,7 +167,7 @@
   margin-top: 1rem;
   text-decoration: none;
   font-weight: bold;
-  color: var(--dashboard-text-background, rgba(0, 0, 0, 0.87));
+  color: var(--my-routes-text-background, rgba(0, 0, 0, 0.87));
   overflow: hidden;
   transition: color 250ms linear;
 }
@@ -201,7 +201,7 @@
 .drawer-lang-bar label .drawer-lang-bar-current .drawer-lang-bar-current-icon {
   width: 1rem;
   height: 1rem;
-  fill: var(--dashboard-tint-30-text-background, rgba(91, 91, 91, 0.909));
+  fill: var(--my-routes-tint-30-text-background, rgba(91, 91, 91, 0.909));
   margin-left: 1rem;
   transform: rotate(0deg);
   transition: transform 250ms linear;
@@ -215,7 +215,7 @@
   width: 0.5rem;
   height: 0.5rem;
   margin-left: 1rem;
-  border: 0.25rem solid var(--dashboard-primary, #0d6efd);
+  border: 0.25rem solid var(--my-routes-primary, #6200ee);
   border-right-color: transparent;
   border-radius: 50%;
   animation: 1s linear infinite drawer-lang-bar-current-progress;
@@ -231,7 +231,7 @@
   transform: rotate(-180deg);
 }
 .drawer-lang-bar label .list {
-  background-color: var(--dashboard-background, #fff);
+  background-color: var(--my-routes-background, #fff);
   position: absolute;
   top: 1.5rem;
   z-index: 21;
@@ -246,7 +246,7 @@
 .drawer-lang-bar label input:checked ~ .list {
   max-height: 10rem;
   opacity: 1;
-  box-shadow: var(--dashboard-box-shadow, 0 0.5rem 1rem rgba(0, 0, 0, 0.15));
+  box-shadow: var(--my-routes-box-shadow, 0 0.5rem 1rem rgba(0, 0, 0, 0.15));
 }
 
 @media screen and (min-width: 900px) {
@@ -257,7 +257,7 @@
     border-right-style: solid;
   }
   .drawer-hover:not(.drawer-open), .drawer-hoverable:hover:not(.drawer-open) {
-    box-shadow: var(--dashboard-box-shadow, 0 0.5rem 1rem rgba(0, 0, 0, 0.15));
+    box-shadow: var(--my-routes-box-shadow, 0 0.5rem 1rem rgba(0, 0, 0, 0.15));
   }
   .drawer-open, .drawer-hover, .drawer-hoverable:hover {
     width: 18rem;
@@ -283,18 +283,18 @@
   justify-content: flex-start;
   overflow: hidden;
   text-decoration: none;
-  color: var(--dashboard-tint-30-text-background, rgba(91, 91, 91, 0.909));
+  color: var(--my-routes-tint-30-text-background, rgba(91, 91, 91, 0.909));
   cursor: pointer;
 }
 .list-item:hover, .list-item-activated {
-  background-color: var(--dashboard-opacity-15-primary, rgba(13, 110, 253, 0.15));
+  background-color: var(--my-routes-opacity-15-primary, rgba(98, 0, 238, 0.15));
 }
 .list-item-icon {
   min-width: 1.5rem;
   min-height: 1.5rem;
   width: 1.5rem;
   height: 1.5rem;
-  fill: var(--dashboard-tint-30-text-background, rgba(91, 91, 91, 0.909));
+  fill: var(--my-routes-tint-30-text-background, rgba(91, 91, 91, 0.909));
   margin: 0 1rem;
 }
 
@@ -309,7 +309,7 @@
   padding: 0.25rem;
   margin: auto;
   border-radius: 0.5rem;
-  background-color: var(--dashboard-opacity-30-background, rgba(255, 255, 255, 0.3));
+  background-color: var(--my-routes-opacity-30-background, rgba(255, 255, 255, 0.3));
   transition: color 250ms linear, background-color 250ms linear, width 250ms linear, box-shadow 250ms linear, height 250ms linear;
 }
 .search form {
@@ -348,15 +348,15 @@
   overflow-y: hidden;
 }
 .search-focus {
-  color: var(--dashboard-text-background, rgba(0, 0, 0, 0.87));
-  background-color: var(--dashboard-background, #fff);
-  box-shadow: var(--dashboard-box-shadow, 0 0.5rem 1rem rgba(0, 0, 0, 0.15));
+  color: var(--my-routes-text-background, rgba(0, 0, 0, 0.87));
+  background-color: var(--my-routes-background, #fff);
+  box-shadow: var(--my-routes-box-shadow, 0 0.5rem 1rem rgba(0, 0, 0, 0.15));
   width: calc(100% - 1.5rem);
   height: 22.125rem;
   z-index: 15;
 }
 .search-focus .search-icon {
-  fill: var(--dashboard-text-background, rgba(0, 0, 0, 0.87));
+  fill: var(--my-routes-text-background, rgba(0, 0, 0, 0.87));
 }
 .search-focus .search-icon-left, .search-focus .search-icon-right {
   display: block;
@@ -368,27 +368,27 @@
 .card {
   display: flex;
   flex-direction: column;
-  background-color: var(--dashboard-background, #fff);
-  border: 1px solid var(--dashboard-border, #dee2e6);
+  background-color: var(--my-routes-background, #fff);
+  border: 1px solid var(--my-routes-border, #dee2e6);
   border-radius: 0.25rem;
-  box-shadow: var(--dashboard-box-shadow-sm, 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075));
+  box-shadow: var(--my-routes-box-shadow-sm, 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075));
   transition: box-shadow 250ms linear;
 }
 .card:hover {
-  box-shadow: var(--dashboard-box-shadow, 0 0.5rem 1rem rgba(0, 0, 0, 0.15));
+  box-shadow: var(--my-routes-box-shadow, 0 0.5rem 1rem rgba(0, 0, 0, 0.15));
 }
 .card-body {
   flex: 1 1 auto;
   padding: 1rem 1rem;
-  color: var(--dashboard-text-background-primary, #0d6efd);
+  color: var(--my-routes-text-background-primary, #6200ee);
 }
 
 .form-item {
   display: flex;
-  color: var(--dashboard-text-background, rgba(0, 0, 0, 0.87));
+  color: var(--my-routes-text-background, rgba(0, 0, 0, 0.87));
 }
 .form-item:focus-within {
-  color: var(--dashboard-text-background-primary, #0d6efd);
+  color: var(--my-routes-text-background-primary, #6200ee);
 }
 
 form .form-label {
@@ -399,18 +399,18 @@ form .form-label {
   padding: 0 1rem;
   box-sizing: border-box;
   overflow: hidden;
-  border: 1px solid var(--dashboard-text-background, rgba(0, 0, 0, 0.87));
+  border: 1px solid var(--my-routes-text-background, rgba(0, 0, 0, 0.87));
   border-radius: 0.25rem;
 }
 form .form-label span {
-  background-color: var(--dashboard-background, #fff);
+  background-color: var(--my-routes-background, #fff);
   position: absolute;
   z-index: 1;
   padding: 0 0.5rem;
   transition: transform 250ms linear;
 }
 form .form-label:focus-within {
-  border: 2px solid var(--dashboard-text-background-primary, #0d6efd);
+  border: 2px solid var(--my-routes-text-background-primary, #6200ee);
 }
 form .form-label:focus-within span {
   transform: translateY(-1.75rem) scale(0.75);
@@ -436,35 +436,35 @@ form .form-control:not(:placeholder-shown) ~ span {
   outline: none;
   user-select: none;
   border-radius: 0.25rem;
-  box-shadow: var(--dashboard-box-shadow-sm, 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075));
+  box-shadow: var(--my-routes-box-shadow-sm, 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075));
   padding: 0 1rem;
   text-decoration: none;
   transition: box-shadow 250ms linear;
 }
 .btn:hover, .btn:focus {
-  box-shadow: var(--dashboard-box-shadow, 0 0.5rem 1rem rgba(0, 0, 0, 0.15));
+  box-shadow: var(--my-routes-box-shadow, 0 0.5rem 1rem rgba(0, 0, 0, 0.15));
 }
 .btn:active {
-  box-shadow: var(--dashboard-box-shadow-lg, 0 1rem 3rem rgba(0, 0, 0, 0.175));
+  box-shadow: var(--my-routes-box-shadow-lg, 0 1rem 3rem rgba(0, 0, 0, 0.175));
 }
 .btn:disabled {
   box-shadow: none;
 }
 .btn-light {
-  background-color: var(--dashboard-background, #fff);
-  color: var(--dashboard-text-background-primary, #0d6efd);
+  background-color: var(--my-routes-background, #fff);
+  color: var(--my-routes-text-background-primary, #6200ee);
 }
 .btn-primary {
-  background-color: var(--dashboard-primary, #0d6efd);
-  color: var(--dashboard-text-primary, white);
+  background-color: var(--my-routes-primary, #6200ee);
+  color: var(--my-routes-text-primary, white);
 }
 .btn-success {
-  background-color: var(--dashboard-success, #198754);
-  color: var(--dashboard-text-primary, white);
+  background-color: var(--my-routes-success, #018786);
+  color: var(--my-routes-text-primary, white);
 }
 .btn-danger {
-  background-color: var(--dashboard-danger, #dc3545);
-  color: var(--dashboard-text-primary, white);
+  background-color: var(--my-routes-danger, #b00020);
+  color: var(--my-routes-text-primary, white);
 }
 
 .loader {
@@ -489,7 +489,7 @@ form .form-control:not(:placeholder-shown) ~ span {
   width: 50%;
   transform: translateX(-150%);
   box-sizing: border-box;
-  border: 0.125rem solid var(--dashboard-primary, #0d6efd);
+  border: 0.125rem solid var(--my-routes-primary, #6200ee);
   animation: 1s linear infinite loader-container-progress;
 }
 
@@ -503,7 +503,7 @@ form .form-control:not(:placeholder-shown) ~ span {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--dashboard-background, #fff);
+  background-color: var(--my-routes-background, #fff);
   opacity: 0;
   transition: z-index 250ms linear, opacity 250ms linear;
 }
@@ -539,10 +539,10 @@ html, body {
 .main-card-service-icon {
   width: 1.5rem;
   height: 1.5rem;
-  color: var(--dashboard-text-background, rgba(0, 0, 0, 0.87));
+  color: var(--my-routes-text-background, rgba(0, 0, 0, 0.87));
 }
 .main-card-service-icon:hover {
-  fill: var(--dashboard-text-background-primary, #0d6efd);
+  fill: var(--my-routes-text-background-primary, #6200ee);
 }
 
 [data-button=scroll-top] {
