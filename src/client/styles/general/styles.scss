@@ -19,6 +19,13 @@ html, body {
   }
 }
 
+.main-content {
+  *::selection {
+    color: global-functions.property(text-primary, global-theme.$text-primary);
+    background-color: global-functions.property(text-background-primary, global-theme.$text-background-primary);
+  }
+}
+
 .main-card {
   display: flex;
   align-items: center;
@@ -39,7 +46,7 @@ html, body {
     color: global-functions.property(text-background, global-theme.$text-background);
     
     &:hover {
-      fill: global-functions.property(text-background-primary, global-theme.$text-background-primary);;
+      fill: global-functions.property(text-background-primary, global-theme.$text-background-primary);
     }
   }
 }

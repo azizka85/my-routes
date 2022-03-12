@@ -526,6 +526,11 @@ html, body {
   opacity: 0;
 }
 
+.main-content *::selection {
+  color: var(--my-routes-text-primary, white);
+  background-color: var(--my-routes-text-background-primary, #6200ee);
+}
+
 .main-card {
   display: flex;
   align-items: center;
