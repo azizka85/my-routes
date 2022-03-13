@@ -3,6 +3,7 @@
     "target": "ESNEXT",
     "module": "ESNEXT",
     "moduleResolution": "node",
+    "allowJs": true,
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
     "strict": true
