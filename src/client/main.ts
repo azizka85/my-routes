@@ -23,7 +23,7 @@ window.addEventListener('DOMContentLoaded', () => {
     async handler(page) {
       queue.stop();
 
-      await loadPage(
+      loadPage(
         queue,
         page.match?.[0] || DEFAULT_LANGUAGE,
         page, 
@@ -37,7 +37,7 @@ window.addEventListener('DOMContentLoaded', () => {
     async handler(page) {
       queue.stop();
 
-      await loadPage(
+      loadPage(
         queue,
         page.match?.[0] || DEFAULT_LANGUAGE,
         page, 
@@ -51,7 +51,7 @@ window.addEventListener('DOMContentLoaded', () => {
     async handler(page) {
       queue.stop();
 
-      await loadPage(
+      loadPage(
         queue,
         page.match?.[0] || DEFAULT_LANGUAGE,
         page, 
