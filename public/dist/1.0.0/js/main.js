@@ -259,19 +259,19 @@ window.addEventListener("DOMContentLoaded", () => {
     rule: `${localeRoute}/?`,
     async handler(page) {
       queue.stop();
-      await loadPage(queue, page.match?.[0] || DEFAULT_LANGUAGE, page, "home-page", ["main-layout"], firstTime);
+      loadPage(queue, page.match?.[0] || DEFAULT_LANGUAGE, page, "home-page", ["main-layout"], firstTime);
     }
   }, {
     rule: `${localeRoute}/?sign-in`,
     async handler(page) {
       queue.stop();
-      await loadPage(queue, page.match?.[0] || DEFAULT_LANGUAGE, page, "sign-in-page", [], firstTime);
+      loadPage(queue, page.match?.[0] || DEFAULT_LANGUAGE, page, "sign-in-page", [], firstTime);
     }
   }, {
     rule: `${localeRoute}/?sign-up`,
     async handler(page) {
       queue.stop();
-      await loadPage(queue, page.match?.[0] || DEFAULT_LANGUAGE, page, "sign-up-page", [], firstTime);
+      loadPage(queue, page.match?.[0] || DEFAULT_LANGUAGE, page, "sign-up-page", [], firstTime);
     }
   }]);
   routeNavigator.addUriListener();
