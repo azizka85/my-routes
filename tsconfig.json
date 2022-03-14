@@ -3,11 +3,12 @@
     "target": "ESNEXT",
     "module": "ESNEXT",
     "moduleResolution": "node",
+    "outDir": "dist",
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
     "strict": true
   },
-  "include": ["src/**/*", "knexfile.ts"],
-  "exclude": ["node_modules/*", "public/*"]
+  "include": ["src/**/*"],
+  "exclude": ["node_modules/*"]
 }

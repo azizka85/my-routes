@@ -7,7 +7,7 @@ const { cwd } = require('process');
 module.exports = {
 
   development: {
-    client: 'sqlite3',
+    client: 'better-sqlite3',
     connection: {
       filename: join(cwd(), 'db.sqlite3')
     },
