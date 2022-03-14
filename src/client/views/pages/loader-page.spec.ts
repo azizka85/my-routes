@@ -24,7 +24,7 @@ describe('LoaderPage test', () => {
   });
 
   test('Should load content via fetch content data', async () => {
-    const html = (await fetchMock('/')).text();
+    const html = await ((await fetchMock('/') as unknown) as Response).text();
 
     const content = document.createElement('div');
     content.innerHTML = html;    

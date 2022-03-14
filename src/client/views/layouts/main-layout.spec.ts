@@ -11,17 +11,17 @@ import locales from '../../../server/helpers/locale-helpers';
 import { fragment, query } from '../../../server/helpers';
 
 import { context } from '../../globals';
-import { DEFAULT_LANGUAGE } from '../../../globals';
+import { DEFAULT_LANGUAGE, PAGE_ROOT } from '../../../globals';
 
 describe('MainLayout test', () => {
   beforeEach(() => {
     const dom = new JSDOM();
 
-    global.window = dom.window;
+    global.window = (dom.window as unknown) as Window & typeof globalThis; 
     global.document = dom.window.document;
   
-    global.location = new LocationMock();
-    global.history = new HistoryMock(location);
+    global.location = (new LocationMock() as unknown) as Location;
+    global.history = (new HistoryMock(location) as unknown) as History;
 
     location.pathname = '/ru';
     location.search = '?main-layout-navigation=1&test=123';
@@ -31,12 +31,12 @@ describe('MainLayout test', () => {
     global.HTMLInputElement = dom.window.HTMLInputElement;
     global.SVGSVGElement = dom.window.SVGSVGElement;
 
-    global.Event = document.defaultView.Event;
-    global.MouseEvent = document.defaultView.MouseEvent;
-    global.FocusEvent = document.defaultView.FocusEvent;
-    global.CustomEvent = document.defaultView.CustomEvent;
+    global.Event = document.defaultView!.Event;
+    global.MouseEvent = document.defaultView!.MouseEvent;
+    global.FocusEvent = document.defaultView!.FocusEvent;
+    global.CustomEvent = document.defaultView!.CustomEvent;
   
-    global.fetch = req => fetchMock(req);
+    global.fetch = req => (fetchMock((req as unknown) as string) as unknown) as Promise<Response>;
   });
 
   test('Should get single instance of MainLayout', () => {
@@ -82,7 +82,7 @@ describe('MainLayout test', () => {
     await instance.load(
       'ru', 
       {
-        fragment: fragment(location.pathname),
+        fragment: fragment(location.pathname, PAGE_ROOT),
         query: query(location.search),
         match: [],
         options: {}
@@ -169,7 +169,7 @@ describe('MainLayout test', () => {
     await instance.load(
       'ru', 
       {
-        fragment: fragment(location.pathname),
+        fragment: fragment(location.pathname, PAGE_ROOT),
         query: query(location.search),
         match: [],
         options: {}
@@ -203,7 +203,7 @@ describe('MainLayout test', () => {
     await instance.load(
       'kz', 
       {
-        fragment: fragment(location.pathname),
+        fragment: fragment(location.pathname, PAGE_ROOT),
         query: query(location.search),
         match: [],
         options: {}
@@ -228,7 +228,7 @@ describe('MainLayout test', () => {
     await instance.load(
       'ru', 
       {
-        fragment: fragment(location.pathname),
+        fragment: fragment(location.pathname, PAGE_ROOT),
         query: query(location.search),
         match: [],
         options: {}
@@ -251,7 +251,7 @@ describe('MainLayout test', () => {
     await instance.load(
       'en', 
       {
-        fragment: fragment(location.pathname),
+        fragment: fragment(location.pathname, PAGE_ROOT),
         query: query(location.search),
         match: [],
         options: {}
@@ -302,7 +302,7 @@ describe('MainLayout test', () => {
 
     expect(instance['searchPanel']?.classList.contains('search-focus')).toBeTruthy();  
 
-    instance['searchInput'].value = 'Hello World!';
+    instance['searchInput']!.value = 'Hello World!';
 
     instance['searchForm']?.querySelector('.search-icon-right')?.dispatchEvent(new MouseEvent('click'));
 

@@ -1944,21 +1944,80 @@ var auth_service_component_default = `<h3 \r
 // src/server/templates/components/auth-service-component.ts
 var auth_service_component_default2 = import_ejs5.default.compile(auth_service_component_default);
 
+// src/server/helpers.ts
+var import_fs = require("fs");
+var import_router2 = __toESM(require_router2());
+function fragment(path, root) {
+  let value = decodeURI(path);
+  if (root !== "/") {
+    value = value.replace(root, "");
+  }
+  return (0, import_router2.trimSlashes)(value);
+}
+function query(search) {
+  if (search) {
+    return (0, import_router2.parseQuery)(search);
+  }
+  return {};
+}
+async function checkStaticResponse(page, path) {
+  if (page.state) {
+    try {
+      const stat = (0, import_fs.lstatSync)(path);
+      if (stat.isFile()) {
+        const data = (0, import_fs.readFileSync)(path);
+        if (path.endsWith(".js")) {
+          page.state.response.setHeader("Content-Type", "application/javascript; charset=UTF-8");
+        } else if (path.endsWith(".svg")) {
+          page.state.response.setHeader("Content-Type", "image/svg+xml");
+        } else if (path.endsWith(".png")) {
+          page.state.response.setHeader("Content-Type", "image/png");
+        } else if (path.endsWith(".css")) {
+          page.state.response.setHeader("Content-Type", "text/css; charset=UTF-8");
+        }
+        page.state.response.write(data);
+        return true;
+      }
+    } catch {
+    }
+  }
+  return false;
+}
+async function getRequestData(request2) {
+  const chunks = [];
+  for await (const chunk of request2) {
+    chunks.push(chunk);
+  }
+  const data = Buffer.concat(chunks).toString();
+  return JSON.parse(data);
+}
+
 // src/server/sign-in/routes.ts
 var routes_default2 = [{
   rule: `${localeRoute}/?sign-in`,
   async handler(page) {
     if (page.state) {
       const lang = page.match?.[0] || DEFAULT_LANGUAGE;
-      const data = {};
-      if (page.query.ajax && !page.query.init) {
-        page.state.response.setHeader("Content-Type", "application/json;charset=UTF-8");
-        page.state.response.write(JSON.stringify(data));
+      if (page.state.request.method === "POST") {
+        const postData = await getRequestData(page.state.request);
+        if (page.query.ajax) {
+          page.state.response.setHeader("Content-Type", "application/json;charset=UTF-8");
+          page.state.response.write(JSON.stringify(postData));
+        } else {
+          page.state.response.statusCode = 302;
+          page.state.response.setHeader("location", encodeURI(lang === DEFAULT_LANGUAGE ? "sign-in" : `${lang}/sign-in`));
+        }
       } else {
-        page.state.response.setHeader("Content-Type", "text/html;charset=UTF-8");
-        page.state.response.write(renderPage(lang, PAGE_ROOT, version, page, "sign-in-page", sign_in_page_default2, data, void 0, {
-          "auth-service-component": auth_service_component_default2
-        }));
+        const data = {};
+        if (page.query.ajax && !page.query.init) {
+          page.state.response.setHeader("Content-Type", "application/json;charset=UTF-8");
+          page.state.response.write(JSON.stringify(data));
+        } else {
+          page.state.response.setHeader("Content-Type", "text/html;charset=UTF-8");
+          page.state.response.write(renderPage(lang, PAGE_ROOT, version, page, "sign-in-page", sign_in_page_default2, data, void 0, {
+            "auth-service-component": auth_service_component_default2
+          }));
+        }
       }
     }
   }
@@ -2144,7 +2203,6 @@ var github_default = {
         code: page.query.code
       });
       const responseData = await new Promise((resolve) => {
-        const buffer = [];
         const req = (0, import_https.request)({
           hostname: "github.com",
           path: "/login/oauth/access_token",
@@ -2154,16 +2212,14 @@ var github_default = {
             "Content-Length": params.length,
             accept: "application/json"
           }
-        }, (res) => {
-          res.on("data", (chunk) => buffer.push(chunk));
-          res.on("end", () => {
-            let data = {};
-            try {
-              data = JSON.parse(Buffer.concat(buffer).toString());
-            } catch {
-            }
-            resolve(data);
-          });
+        }, async (res) => {
+          let data = {};
+          try {
+            data = await getRequestData(res);
+            ;
+          } catch {
+          }
+          resolve(data);
         });
         req.on("error", (err) => resolve(err));
         req.write(params);
@@ -2174,7 +2230,6 @@ var github_default = {
       };
       if (responseData.access_token) {
         const userData = await new Promise((resolve) => {
-          const buffer = [];
           const req = (0, import_https.request)({
             hostname: "api.github.com",
             path: "/user",
@@ -2183,16 +2238,13 @@ var github_default = {
               "User-Agent": page.state?.request.headers["user-agent"] || "",
               Authorization: `token ${responseData.access_token}`
             }
-          }, (res) => {
-            res.on("data", (chunk) => buffer.push(chunk));
-            res.on("end", () => {
-              let data = {};
-              try {
-                data = JSON.parse(Buffer.concat(buffer).toString());
-              } catch {
-              }
-              resolve(data);
-            });
+          }, async (res) => {
+            let data = {};
+            try {
+              data = await getRequestData(res);
+            } catch {
+            }
+            resolve(data);
           });
           req.on("error", (err) => resolve(err));
           req.end();
@@ -2233,46 +2285,6 @@ var routes_default4 = [{
   }
 }];
 
-// src/server/helpers.ts
-var import_fs = require("fs");
-var import_router2 = __toESM(require_router2());
-function fragment(path, root) {
-  let value = decodeURI(path);
-  if (root !== "/") {
-    value = value.replace(root, "");
-  }
-  return (0, import_router2.trimSlashes)(value);
-}
-function query(search) {
-  if (search) {
-    return (0, import_router2.parseQuery)(search);
-  }
-  return {};
-}
-async function checkStaticResponse(page, path) {
-  if (page.state) {
-    try {
-      const stat = (0, import_fs.lstatSync)(path);
-      if (stat.isFile()) {
-        const data = (0, import_fs.readFileSync)(path);
-        if (path.endsWith(".js")) {
-          page.state.response.setHeader("Content-Type", "application/javascript; charset=UTF-8");
-        } else if (path.endsWith(".svg")) {
-          page.state.response.setHeader("Content-Type", "image/svg+xml");
-        } else if (path.endsWith(".png")) {
-          page.state.response.setHeader("Content-Type", "image/png");
-        } else if (path.endsWith(".css")) {
-          page.state.response.setHeader("Content-Type", "text/css; charset=UTF-8");
-        }
-        page.state.response.write(data);
-        return true;
-      }
-    } catch {
-    }
-  }
-  return false;
-}
-
 // src/server/init-environment.ts
 var import_dotenv = __toESM(require_main());
 import_dotenv.default.config();
@@ -2311,7 +2323,10 @@ var server = (0, import_http.createServer)((req, res) => {
   const splits = req.url?.split("?") || [];
   const currentPath = fragment(splits[0], app_default.rootPath);
   const currentQuery = query(splits[1]);
-  app_default.processUrl(currentPath, currentQuery, state).finally(() => res.end());
+  app_default.processUrl(currentPath, currentQuery, state).catch((err) => {
+    res.statusCode = 500;
+    console.error(err);
+  }).finally(() => res.end());
 });
 server.listen(port, void 0, void 0, () => {
   console.log(`Server listening on port ${port}`);

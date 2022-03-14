@@ -14,20 +14,20 @@ describe('HomePage test', () => {
   beforeEach(() => {
     const dom = new JSDOM();
 
-    global.window = dom.window;
+    global.window = (dom.window as unknown) as Window & typeof globalThis; 
     global.document = dom.window.document;
 
-    global.location = new LocationMock();
+    global.location = (new LocationMock() as unknown) as Location;
     
     location.pathname = '/';
     location.search = '';  
 
     global.HTMLElement = dom.window.HTMLElement;
 
-    global.Event = document.defaultView.Event;
-    global.CustomEvent = document.defaultView.CustomEvent;
+    global.Event = document.defaultView!.Event;
+    global.CustomEvent = document.defaultView!.CustomEvent;
 
-    global.fetch = req => fetchMock(req);
+    global.fetch = req => (fetchMock((req as unknown) as string) as unknown) as Promise<Response>;
 
     window.scrollTo = options => {
       window.scrollX = typeof options === 'number' ? options : options?.left || 0;

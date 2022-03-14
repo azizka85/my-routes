@@ -15,9 +15,9 @@ describe('DefaultLayout test', () => {
 
     global.document = dom.window.document;
 
-    global.location = new LocationMock();
+    global.location = (new LocationMock() as unknown) as Location;
 
-    global.fetch = req => fetchMock(req);
+    global.fetch = req => (fetchMock((req as unknown) as string) as unknown) as Promise<Response>;
   });
 
   test('Should get single instance of DefaultLayout', () => {
@@ -39,11 +39,11 @@ describe('DefaultLayout test', () => {
 
     await instance.replaceContent(signInPage)
 
-    expect(instance.content).toBe(signInPage);
+    expect(instance['content']).toBe(signInPage);
 
     await instance.replaceContent(signUpPage);
 
-    expect(instance.content).toBe(signUpPage);
+    expect(instance['content']).toBe(signUpPage);
   });
 });
 

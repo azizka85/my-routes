@@ -1,4 +1,5 @@
 import { lstatSync, readFileSync } from 'fs';
+import { IncomingMessage } from 'http';
 
 import { trimSlashes, parseQuery, Page } from '@azizka/router';
 
@@ -49,4 +50,16 @@ export async function checkStaticResponse(page: Page<RouteOptions, RouteState>, 
   }
 
   return false;
+}
+
+export async function getRequestData(request: IncomingMessage) {
+  const chunks = [];
+
+  for await(const chunk of request) {
+    chunks.push(chunk);
+  }
+
+  const data = Buffer.concat(chunks).toString();
+
+  return JSON.parse(data);
 }

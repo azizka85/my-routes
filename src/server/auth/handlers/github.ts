@@ -5,6 +5,7 @@ import { Page } from '@azizka/router';
 import { RouteOptions } from '../../data/route-options';
 import { RouteState } from '../../data/route-state';
 
+import { getRequestData } from '../../helpers';
 import { getQueryParameters } from '../../../helpers';
 
 const githubAuthorizeUrl = 'https://github.com/login/oauth/authorize';
@@ -40,8 +41,6 @@ export default {
       });
 
       const responseData = await new Promise(resolve => {
-        const buffer: any[] = [];
-
         const req = request({
           hostname: 'github.com',
           path: '/login/oauth/access_token',
@@ -51,18 +50,14 @@ export default {
             'Content-Length': params.length,
             accept: 'application/json'
           }
-        }, res => {
-          res.on('data', chunk => buffer.push(chunk));
+        }, async (res) => {
+          let data = {};
 
-          res.on('end', () => {
-            let data = {};
+          try {
+            data = await getRequestData(res);;
+          } catch {}
 
-            try {
-              data = JSON.parse(Buffer.concat(buffer).toString());            
-            } catch {}          
-
-            resolve(data);
-          });
+          resolve(data);
         });
 
         req.on('error', err => resolve(err));
@@ -77,8 +72,6 @@ export default {
 
       if(responseData.access_token) {
         const userData = await new Promise(resolve => {
-          const buffer: any[] = [];
-
           const req = request({
             hostname: 'api.github.com',
             path: '/user',
@@ -87,18 +80,14 @@ export default {
               'User-Agent': page.state?.request.headers['user-agent'] || '',
               Authorization: `token ${responseData.access_token}`
             }
-          }, res => {
-            res.on('data', chunk => buffer.push(chunk));
+          }, async (res) => {
+            let data = {};
 
-            res.on('end', () => {
-              let data = {};
-    
-              try {
-                data = JSON.parse(Buffer.concat(buffer).toString());            
-              } catch {}            
-    
-              resolve(data);
-            });
+            try {
+              data = await getRequestData(res);
+            } catch {}
+
+            resolve(data);
           });
 
           req.on('error', err => resolve(err));

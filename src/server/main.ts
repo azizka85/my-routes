@@ -21,6 +21,10 @@ const server = createServer((req, res) => {
 
   app
     .processUrl(currentPath, currentQuery, state)
+    .catch(err => {
+      res.statusCode = 500;
+      console.error(err);
+    })
     .finally(() => res.end()); 
 });
 

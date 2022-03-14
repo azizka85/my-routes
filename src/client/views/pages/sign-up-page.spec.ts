@@ -15,17 +15,17 @@ describe('SignUpPage test', () => {
   beforeEach(() => {
     const dom = new JSDOM();
 
-    global.window = dom.window;
+    global.window = (dom.window as unknown) as Window & typeof globalThis; 
     global.document = dom.window.document;
   
-    global.location = new LocationMock();
+    global.location = (new LocationMock() as unknown) as Location;
     
     location.pathname = '/ru/sign-up';
     location.search = '';  
   
     global.HTMLElement = dom.window.HTMLElement;
   
-    global.fetch = req => fetchMock(req);
+    global.fetch = req => (fetchMock((req as unknown) as string) as unknown) as Promise<Response>;
   });
 
   test('Should get single instance of SignUpPage', async () => {
