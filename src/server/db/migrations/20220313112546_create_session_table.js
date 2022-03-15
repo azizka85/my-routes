@@ -12,6 +12,8 @@
       .unsigned()
       .references('id')
       .inTable('user')
+
+    table.text('service');
       
     table
       .timestamp('created_at')
