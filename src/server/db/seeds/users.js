@@ -12,7 +12,9 @@ exports.seed = function(knex) {
         full_name: 'Aziz Kudaikulov',
         email: 'aziz.kudaikulov@gmail.com',
         password: generateMD5Hash('lock'),
-        photo: 'https://docs.google.com/uc?id=1PgAGg8e_zVUG32RM7_BYyoDxZt8YsDfy'        
+        photo: 'https://docs.google.com/uc?id=1PgAGg8e_zVUG32RM7_BYyoDxZt8YsDfy',
+        created_at: Date.now(),
+        updated_at: Date.now()        
       }]);
     });
 };

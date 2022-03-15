@@ -17,6 +17,10 @@
   ],
   "author": "Aziz Kudaikulov <aziz.kudaikulov@gmail.com>",
   "license": "MIT",
+  "dependencies": {
+    "knex": "^1.0.4",
+    "better-sqlite3": "^7.5.0"
+  },
   "devDependencies": {
     "@azizka/i18n": "^1.0.1",
     "@azizka/promise-queue": "^1.0.0",
@@ -33,10 +37,8 @@
     "ejs": "^3.1.6",
     "esbuild": "^0.14.23",
     "jest": "^27.5.1",
-    "jsdom": "^19.0.0",
-    "knex": "^1.0.4",
+    "jsdom": "^19.0.0",  
     "nodemon": "^2.0.15",
-    "sass": "^1.49.9",
-    "better-sqlite3": "^7.5.0"
+    "sass": "^1.49.9"
   }
 }

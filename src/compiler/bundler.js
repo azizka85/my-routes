@@ -61,6 +61,10 @@ async function build(version, dev) {
     entryPoints: [
       './src/server/main.ts'
     ],
+    external: [
+      'knex',
+      'better-sqlite3'
+    ],
     outdir: './dist',
     loader: {
       '.ejs': 'text'

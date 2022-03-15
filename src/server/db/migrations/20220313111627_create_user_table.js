@@ -11,12 +11,10 @@ exports.up = function(knex) {
     
     table
       .timestamp('created_at')
-      .defaultTo(knex.fn.now())
       .notNullable();
 
     table
       .timestamp('updated_at')
-      .defaultTo(knex.fn.now())
       .notNullable();
   })
 };

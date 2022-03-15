@@ -1,10 +1,12 @@
 import { lstatSync, readFileSync } from 'fs';
-import { IncomingMessage } from 'http';
+import { IncomingMessage, ServerResponse } from 'http';
+import { randomBytes } from 'crypto';
 
 import { trimSlashes, parseQuery, Page } from '@azizka/router';
 
 import { RouteOptions } from './data/route-options';
 import { RouteState } from './data/route-state';
+import { CookieOptions } from './data/cookie-options';
 
 export function fragment(path: string, root: string) {
   let value = decodeURI(path);
@@ -62,4 +64,55 @@ export async function getRequestData(request: IncomingMessage) {
   const data = Buffer.concat(chunks).toString();
 
   return JSON.parse(data);
+}
+
+export function generateId() {
+  return randomBytes(48).toString('hex');
+}
+
+export function parseCookies(request: IncomingMessage) {
+  const data: {
+    [key: string]: string
+  } = {};
+
+  request.headers.cookie?.split(';').forEach(item => {
+    const parts = item.split('=');
+
+    const key = parts.shift()?.trim();
+
+    if(key) {
+      data[key] = decodeURI(parts.join('='));
+    }
+  });
+
+  return data;
+}
+
+export function setCookie(
+  res: ServerResponse, 
+  name: string,
+  value: string,
+  options?: CookieOptions
+) {
+  try {
+    const chunks = [`${name}=${encodeURI(value)}`];
+
+    if(options) {
+      for(const key of Object.keys(options)) {
+        if(options[key] !== null) {
+          chunks.push(`${key}=${options[key]}`);
+        } else {
+          chunks.push(key);
+        }
+      }
+    }
+
+    const cookies = res.getHeader('Set-Cookie') as string[] || [];
+  
+    cookies.push(chunks.join('; '));
+
+    res.setHeader('Set-Cookie', cookies);
+  } catch(err) {
+    console.error(err);    
+  }
 }

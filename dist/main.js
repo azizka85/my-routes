@@ -1183,7 +1183,7 @@ var require_main = __commonJS({
     function _resolveHome(envPath) {
       return envPath[0] === "~" ? path.join(os.homedir(), envPath.slice(1)) : envPath;
     }
-    function config(options) {
+    function config2(options) {
       let dotenvPath = path.resolve(process.cwd(), ".env");
       let encoding = "utf8";
       const debug = Boolean(options && options.debug);
@@ -1223,12 +1223,54 @@ var require_main = __commonJS({
       }
     }
     var DotenvModule = {
-      config,
+      config: config2,
       parse
     };
     module2.exports.config = DotenvModule.config;
     module2.exports.parse = DotenvModule.parse;
     module2.exports = DotenvModule;
+  }
+});
+
+// knexfile.js
+var require_knexfile = __commonJS({
+  "knexfile.js"(exports, module2) {
+    var { join: join2 } = require("path");
+    var { cwd } = require("process");
+    module2.exports = {
+      development: {
+        client: "better-sqlite3",
+        connection: {
+          filename: join2(cwd(), "db.sqlite3")
+        },
+        migrations: {
+          directory: join2(cwd(), "src/server/db/migrations")
+        },
+        seeds: {
+          directory: join2(cwd(), "src/server/db/seeds")
+        },
+        useNullAsDefault: true
+      },
+      production: {
+        client: "postgresql",
+        connection: {
+          database: "my_db",
+          user: "username",
+          password: "password"
+        },
+        pool: {
+          min: 2,
+          max: 10
+        },
+        migrations: {
+          directory: join2(cwd(), "src/server/db/migrations")
+        },
+        seeds: {
+          directory: join2(cwd(), "src/server/db/seeds")
+        },
+        useNullAsDefault: true
+      }
+    };
   }
 });
 
@@ -1946,6 +1988,7 @@ var auth_service_component_default2 = import_ejs5.default.compile(auth_service_c
 
 // src/server/helpers.ts
 var import_fs = require("fs");
+var import_crypto = require("crypto");
 var import_router2 = __toESM(require_router2());
 function fragment(path, root) {
   let value = decodeURI(path);
@@ -1990,6 +2033,39 @@ async function getRequestData(request2) {
   }
   const data = Buffer.concat(chunks).toString();
   return JSON.parse(data);
+}
+function generateId() {
+  return (0, import_crypto.randomBytes)(48).toString("hex");
+}
+function parseCookies(request2) {
+  const data = {};
+  request2.headers.cookie?.split(";").forEach((item) => {
+    const parts = item.split("=");
+    const key = parts.shift()?.trim();
+    if (key) {
+      data[key] = decodeURI(parts.join("="));
+    }
+  });
+  return data;
+}
+function setCookie(res, name, value, options) {
+  try {
+    const chunks = [`${name}=${encodeURI(value)}`];
+    if (options) {
+      for (const key of Object.keys(options)) {
+        if (options[key] !== null) {
+          chunks.push(`${key}=${options[key]}`);
+        } else {
+          chunks.push(key);
+        }
+      }
+    }
+    const cookies = res.getHeader("Set-Cookie") || [];
+    cookies.push(chunks.join("; "));
+    res.setHeader("Set-Cookie", cookies);
+  } catch (err) {
+    console.error(err);
+  }
 }
 
 // src/server/sign-in/routes.ts
@@ -2313,20 +2389,84 @@ app.addRoutes(routes_default3);
 app.addRoutes(routes_default4);
 var app_default = app;
 
+// src/server/db/knex.ts
+var import_knex = __toESM(require("knex"));
+var import_knexfile = __toESM(require_knexfile());
+var environment = process.env.NODE_ENV || "development";
+var config = import_knexfile.default[environment];
+var knex_default = (0, import_knex.default)(config);
+
+// src/server/helpers/session-helpers.ts
+async function clearExpiredSessions() {
+  try {
+    await knex_default("session").where("created_at", "<=", Date.now() - 24 * 3600 * 1e3).del();
+  } catch (err) {
+    console.error(err);
+  }
+}
+async function getSessionData(sessionId) {
+  try {
+    const row = await knex_default("session").where("token", sessionId).first("data");
+    return JSON.parse(row.data);
+  } catch (err) {
+    console.error(err);
+  }
+  return {};
+}
+async function sessionExist(sessionId) {
+  try {
+    const row = await knex_default("session").count("*", { as: "cnt" }).where("token", sessionId).first();
+    return row && row.cnt > 0;
+  } catch (err) {
+    console.error(err);
+  }
+  return false;
+}
+async function setSessionData(sessionId, data) {
+  try {
+    const exist = await sessionExist(sessionId);
+    if (exist) {
+      await knex_default("session").where("token", sessionId).update({
+        data: JSON.stringify(data),
+        created_at: Date.now()
+      });
+    } else {
+      await knex_default("session").insert({
+        token: sessionId,
+        data: JSON.stringify(data),
+        created_at: Date.now()
+      });
+    }
+  } catch (err) {
+    console.error(err);
+  }
+}
+
 // src/server/main.ts
 var port = parseInt(process.env.PORT || "3000");
-var server = (0, import_http.createServer)((req, res) => {
+var server = (0, import_http.createServer)(async (req, res) => {
+  await clearExpiredSessions();
+  const cookies = parseCookies(req);
+  const sessionId = cookies.sessionId || generateId();
   const state = {
     request: req,
-    response: res
+    response: res,
+    session: await getSessionData(sessionId)
   };
+  setCookie(res, "sessionId", sessionId, {
+    "Max-Age": `${24 * 3600}`,
+    "Path": "/"
+  });
   const splits = req.url?.split("?") || [];
   const currentPath = fragment(splits[0], app_default.rootPath);
   const currentQuery = query(splits[1]);
   app_default.processUrl(currentPath, currentQuery, state).catch((err) => {
     res.statusCode = 500;
     console.error(err);
-  }).finally(() => res.end());
+  }).finally(async () => {
+    res.end();
+    await setSessionData(sessionId, state.session);
+  });
 });
 server.listen(port, void 0, void 0, () => {
   console.log(`Server listening on port ${port}`);
