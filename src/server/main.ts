@@ -5,7 +5,7 @@ import app from './app';
 import { RouteState } from './data/route-state';
 
 import { fragment, query, generateId, parseCookies, setCookie } from './helpers';
-import { clearExpiredSessions, getSessionData, setSessionData } from './helpers/session-helpers';
+import { clearExpiredSessions, getSession, setSession } from './helpers/session-helpers';
 
 const port = parseInt(process.env.PORT || '3000');
 
@@ -18,7 +18,7 @@ const server = createServer(async (req, res) => {
   const state: RouteState = {
     request: req,
     response: res,
-    session: await getSessionData(sessionId)
+    session: await getSession(sessionId)
   };
 
   setCookie(res, 'sessionId', sessionId, {
@@ -40,7 +40,7 @@ const server = createServer(async (req, res) => {
     .finally(async () => {
       res.end();
 
-      await setSessionData(sessionId, state.session);
+      await setSession(state.session);
     }); 
 });
 

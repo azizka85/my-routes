@@ -970,7 +970,7 @@ var require_utils3 = __commonJS({
 var require_translator = __commonJS({
   "node_modules/@azizka/i18n/src/translator.js"(exports, module2) {
     var { isObject } = require_utils3();
-    var Translator3 = class {
+    var Translator4 = class {
       data;
       globalContext;
       extension;
@@ -978,7 +978,7 @@ var require_translator = __commonJS({
         this.resetContext();
       }
       static create(data) {
-        const translator = new Translator3();
+        const translator = new Translator4();
         translator.add(data);
         return translator;
       }
@@ -1134,7 +1134,7 @@ var require_translator = __commonJS({
       }
     };
     module2.exports = {
-      Translator: Translator3
+      Translator: Translator4
     };
   }
 });
@@ -1142,11 +1142,53 @@ var require_translator = __commonJS({
 // node_modules/@azizka/i18n/index.js
 var require_i18n = __commonJS({
   "node_modules/@azizka/i18n/index.js"(exports, module2) {
-    var { Translator: Translator3 } = require_translator();
+    var { Translator: Translator4 } = require_translator();
     var { isObject } = require_utils3();
     module2.exports = {
-      Translator: Translator3,
+      Translator: Translator4,
       isObject
+    };
+  }
+});
+
+// knexfile.js
+var require_knexfile = __commonJS({
+  "knexfile.js"(exports, module2) {
+    var { join: join2 } = require("path");
+    var { cwd } = require("process");
+    module2.exports = {
+      development: {
+        client: "better-sqlite3",
+        connection: {
+          filename: join2(cwd(), "db.sqlite3")
+        },
+        migrations: {
+          directory: join2(cwd(), "src/server/db/migrations")
+        },
+        seeds: {
+          directory: join2(cwd(), "src/server/db/seeds")
+        },
+        useNullAsDefault: true
+      },
+      production: {
+        client: "postgresql",
+        connection: {
+          database: "my_db",
+          user: "username",
+          password: "password"
+        },
+        pool: {
+          min: 2,
+          max: 10
+        },
+        migrations: {
+          directory: join2(cwd(), "src/server/db/migrations")
+        },
+        seeds: {
+          directory: join2(cwd(), "src/server/db/seeds")
+        },
+        useNullAsDefault: true
+      }
     };
   }
 });
@@ -1232,44 +1274,15 @@ var require_main = __commonJS({
   }
 });
 
-// knexfile.js
-var require_knexfile = __commonJS({
-  "knexfile.js"(exports, module2) {
-    var { join: join2 } = require("path");
-    var { cwd } = require("process");
+// src/server/db/helpers.js
+var require_helpers = __commonJS({
+  "src/server/db/helpers.js"(exports, module2) {
+    var { createHash } = require("crypto");
+    function generateMD5Hash2(text) {
+      return createHash("md5").update(text).digest("base64");
+    }
     module2.exports = {
-      development: {
-        client: "better-sqlite3",
-        connection: {
-          filename: join2(cwd(), "db.sqlite3")
-        },
-        migrations: {
-          directory: join2(cwd(), "src/server/db/migrations")
-        },
-        seeds: {
-          directory: join2(cwd(), "src/server/db/seeds")
-        },
-        useNullAsDefault: true
-      },
-      production: {
-        client: "postgresql",
-        connection: {
-          database: "my_db",
-          user: "username",
-          password: "password"
-        },
-        pool: {
-          min: 2,
-          max: 10
-        },
-        migrations: {
-          directory: join2(cwd(), "src/server/db/migrations")
-        },
-        seeds: {
-          directory: join2(cwd(), "src/server/db/seeds")
-        },
-        useNullAsDefault: true
-      }
+      generateMD5Hash: generateMD5Hash2
     };
   }
 });
@@ -1625,7 +1638,9 @@ var en_default = {
     "Photo": "Photo",
     "Cancel": "Cancel",
     "Or use the service": "Or use the service",
-    "Auth service": "Auth service"
+    "Auth service": "Auth service",
+    "User with this email and password doesn't exist": "User with this email and password doesn't exist",
+    "User with this email already exists": "User with this email already exists"
   }
 };
 
@@ -1642,7 +1657,9 @@ var ru_default = {
     "Cancel": "\u041E\u0442\u043C\u0435\u043D\u0430",
     "Photo": "\u0424\u043E\u0442\u043E",
     "Or use the service": "\u0418\u043B\u0438 \u0438\u0441\u043F\u043E\u043B\u044C\u0437\u0443\u0439\u0442\u0435 \u0441\u0435\u0440\u0432\u0438\u0441",
-    "Auth service": "\u0421\u0435\u0440\u0432\u0438\u0441 \u0430\u0443\u0442\u0435\u043D\u0442\u0438\u0444\u0438\u043A\u0430\u0446\u0438\u0438"
+    "Auth service": "\u0421\u0435\u0440\u0432\u0438\u0441 \u0430\u0443\u0442\u0435\u043D\u0442\u0438\u0444\u0438\u043A\u0430\u0446\u0438\u0438",
+    "User with this email and password doesn't exist": "\u041F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u044C \u0441 \u0442\u0430\u043A\u0438\u043C email \u0438 \u043F\u0430\u0440\u043E\u043B\u0435\u043C \u043D\u0435 \u043D\u0430\u0439\u0434\u0435\u043D",
+    "User with this email already exists": "\u041F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u044C \u0441 \u0442\u0430\u043A\u0438\u043C email \u0443\u0436\u0435 \u0441\u0443\u0449\u0435\u0441\u0442\u0432\u0443\u0435\u0442"
   }
 };
 
@@ -1659,7 +1676,9 @@ var kz_default = {
     "Photo": "\u0424\u043E\u0442\u043E",
     "Cancel": "\u0411\u043E\u043B\u0434\u044B\u0440\u043C\u0430\u0443",
     "Or use the service": "\u041D\u0435\u043C\u0435\u0441\u0435 \u0441\u0435\u0440\u0432\u0438\u0441\u0442\u0456 \u049B\u043E\u043B\u0434\u0430\u04A3\u044B\u0437",
-    "Auth service": "\u0410\u0443\u0442\u0435\u043D\u0442\u0438\u0444\u0438\u043A\u0430\u0446\u0438\u044F \u0441\u0435\u0440\u0432\u0438\u0441\u0456"
+    "Auth service": "\u0410\u0443\u0442\u0435\u043D\u0442\u0438\u0444\u0438\u043A\u0430\u0446\u0438\u044F \u0441\u0435\u0440\u0432\u0438\u0441\u0456",
+    "User with this email and password doesn't exist": "\u049A\u043E\u043B\u0434\u0430\u043D\u0443\u0448\u044B \u043E\u0441\u044B\u043D\u0434\u0430\u0439 email \u0436\u04D9\u043D\u0435 \u043F\u0430\u0440\u043E\u043B\u044C\u043C\u0435\u043D \u0442\u0430\u0431\u044B\u043B\u0493\u0430\u043D \u0436\u043E\u049B",
+    "User with this email already exists": "\u049A\u043E\u043B\u0434\u0430\u043D\u0443\u0448\u044B \u043E\u0441\u044B\u043D\u0434\u0430\u0439 email \u0431\u0430\u0440"
   }
 };
 
@@ -1986,6 +2005,78 @@ var auth_service_component_default = `<h3 \r
 // src/server/templates/components/auth-service-component.ts
 var auth_service_component_default2 = import_ejs5.default.compile(auth_service_component_default);
 
+// src/server/helpers/user-helpers.ts
+var import_i18n3 = __toESM(require_i18n());
+
+// src/server/db/knex.ts
+var import_knex = __toESM(require("knex"));
+var import_knexfile = __toESM(require_knexfile());
+
+// src/server/init-environment.ts
+var import_dotenv = __toESM(require_main());
+import_dotenv.default.config();
+
+// src/server/db/knex.ts
+var environment = process.env.NODE_ENV || "development";
+var config = import_knexfile.default[environment];
+var knex_default = (0, import_knex.default)(config);
+
+// src/server/helpers/user-helpers.ts
+var import_helpers3 = __toESM(require_helpers());
+async function emailExist(email) {
+  const row = await knex_default("user").where("email", email).first("id");
+  return row && row.id > 0;
+}
+async function signIn(email, password, lang, session) {
+  const translator = lang in locale_helpers_default ? locale_helpers_default[lang] : new import_i18n3.Translator();
+  const result = {
+    status: "OK" /* OK */
+  };
+  try {
+    const row = await knex_default("user").where("email", email).andWhere("password", (0, import_helpers3.generateMD5Hash)(password)).first("id");
+    if (!row?.id) {
+      result.status = "Error" /* Error */;
+      result.data = translator.translate("User with this email and password doesn't exist");
+    } else {
+      session.userId = row.id;
+      session.service = null;
+    }
+  } catch (err) {
+    console.error(err);
+    result.status = "Error" /* Error */;
+    result.data = err?.message || err;
+  }
+  return result;
+}
+async function signUp(name, email, password, photo, lang, session) {
+  const translator = lang in locale_helpers_default ? locale_helpers_default[lang] : new import_i18n3.Translator();
+  let result = {
+    status: "OK" /* OK */
+  };
+  try {
+    const exist = await emailExist(email);
+    if (exist) {
+      result.status = "Error" /* Error */;
+      result.data = translator.translate("User with this email already exists");
+    } else {
+      await knex_default("user").insert({
+        full_name: name,
+        email,
+        password: (0, import_helpers3.generateMD5Hash)(password),
+        photo,
+        created_at: Date.now(),
+        updated_at: Date.now()
+      });
+      result = await signIn(email, password, lang, session);
+    }
+  } catch (err) {
+    console.error(err);
+    result.status = "Error" /* Error */;
+    result.data = err?.message || err;
+  }
+  return result;
+}
+
 // src/server/helpers.ts
 var import_fs = require("fs");
 var import_crypto = require("crypto");
@@ -2078,7 +2169,8 @@ var routes_default2 = [{
         const postData = await getRequestData(page.state.request);
         if (page.query.ajax) {
           page.state.response.setHeader("Content-Type", "application/json;charset=UTF-8");
-          page.state.response.write(JSON.stringify(postData));
+          const result = await signIn(postData.email || "", postData.password || "", lang, page.state.session);
+          page.state.response.write(JSON.stringify(result));
         } else {
           page.state.response.statusCode = 302;
           page.state.response.setHeader("location", encodeURI(lang === DEFAULT_LANGUAGE ? "sign-in" : `${lang}/sign-in`));
@@ -2239,15 +2331,27 @@ var routes_default3 = [{
   async handler(page) {
     if (page.state) {
       const lang = page.match?.[0] || DEFAULT_LANGUAGE;
-      const data = {};
-      if (page.query.ajax && !page.query.init) {
-        page.state.response.setHeader("Content-Type", "application/json;charset=UTF-8");
-        page.state.response.write(JSON.stringify(data));
+      if (page.state.request.method === "POST") {
+        const postData = await getRequestData(page.state.request);
+        if (page.query.ajax) {
+          page.state.response.setHeader("Content-Type", "application/json;charset=UTF-8");
+          const result = await signUp(postData.name || "", postData.email || "", postData.password || "", postData.photo || "", lang, page.state.session);
+          page.state.response.write(JSON.stringify(result));
+        } else {
+          page.state.response.statusCode = 302;
+          page.state.response.setHeader("location", encodeURI(lang === DEFAULT_LANGUAGE ? "sign-up" : `${lang}/sign-up`));
+        }
       } else {
-        page.state.response.setHeader("Content-Type", "text/html;charset=UTF-8");
-        page.state.response.write(renderPage(lang, PAGE_ROOT, version, page, "sign-up-page", sign_up_page_default2, data, void 0, {
-          "auth-service-component": auth_service_component_default2
-        }));
+        const data = {};
+        if (page.query.ajax && !page.query.init) {
+          page.state.response.setHeader("Content-Type", "application/json;charset=UTF-8");
+          page.state.response.write(JSON.stringify(data));
+        } else {
+          page.state.response.setHeader("Content-Type", "text/html;charset=UTF-8");
+          page.state.response.write(renderPage(lang, PAGE_ROOT, version, page, "sign-up-page", sign_up_page_default2, data, void 0, {
+            "auth-service-component": auth_service_component_default2
+          }));
+        }
       }
     }
   }
@@ -2361,10 +2465,6 @@ var routes_default4 = [{
   }
 }];
 
-// src/server/init-environment.ts
-var import_dotenv = __toESM(require_main());
-import_dotenv.default.config();
-
 // src/server/app.ts
 var app = new import_router3.Router({
   root: PAGE_ROOT,
@@ -2389,13 +2489,6 @@ app.addRoutes(routes_default3);
 app.addRoutes(routes_default4);
 var app_default = app;
 
-// src/server/db/knex.ts
-var import_knex = __toESM(require("knex"));
-var import_knexfile = __toESM(require_knexfile());
-var environment = process.env.NODE_ENV || "development";
-var config = import_knexfile.default[environment];
-var knex_default = (0, import_knex.default)(config);
-
 // src/server/helpers/session-helpers.ts
 async function clearExpiredSessions() {
   try {
@@ -2404,14 +2497,24 @@ async function clearExpiredSessions() {
     console.error(err);
   }
 }
-async function getSessionData(sessionId) {
+async function getSession(sessionId) {
+  const session = {
+    id: sessionId,
+    data: {},
+    userId: null,
+    service: null,
+    createdAt: Date.now()
+  };
   try {
-    const row = await knex_default("session").where("token", sessionId).first("data");
-    return JSON.parse(row.data);
+    const row = await knex_default("session").where("token", sessionId).first("data", "user_id", "service", "created_at");
+    session.data = JSON.parse(row.data);
+    session.userId = row.user_id;
+    session.service = row.service;
+    session.createdAt = row.created_at;
   } catch (err) {
     console.error(err);
   }
-  return {};
+  return session;
 }
 async function sessionExist(sessionId) {
   try {
@@ -2422,18 +2525,22 @@ async function sessionExist(sessionId) {
   }
   return false;
 }
-async function setSessionData(sessionId, data) {
+async function setSession(session) {
   try {
-    const exist = await sessionExist(sessionId);
+    const exist = await sessionExist(session.id);
     if (exist) {
-      await knex_default("session").where("token", sessionId).update({
-        data: JSON.stringify(data),
+      await knex_default("session").where("token", session.id).update({
+        data: JSON.stringify(session.data),
+        user_id: session.userId,
+        service: session.service,
         created_at: Date.now()
       });
     } else {
       await knex_default("session").insert({
-        token: sessionId,
-        data: JSON.stringify(data),
+        token: session.id,
+        data: JSON.stringify(session.data),
+        user_id: session.userId,
+        service: session.service,
         created_at: Date.now()
       });
     }
@@ -2451,7 +2558,7 @@ var server = (0, import_http.createServer)(async (req, res) => {
   const state = {
     request: req,
     response: res,
-    session: await getSessionData(sessionId)
+    session: await getSession(sessionId)
   };
   setCookie(res, "sessionId", sessionId, {
     "Max-Age": `${24 * 3600}`,
@@ -2465,7 +2572,7 @@ var server = (0, import_http.createServer)(async (req, res) => {
     console.error(err);
   }).finally(async () => {
     res.end();
-    await setSessionData(sessionId, state.session);
+    await setSession(state.session);
   });
 });
 server.listen(port, void 0, void 0, () => {

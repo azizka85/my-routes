@@ -1,5 +1,7 @@
 import knex from '../db/knex';
 
+import { Session } from '../data/session';
+
 export async function clearExpiredSessions() {
   try {
     await knex('session')
@@ -10,18 +12,29 @@ export async function clearExpiredSessions() {
   }
 }
 
-export async function getSessionData(sessionId: string) {
+export async function getSession(sessionId: string) {
+  const session: Session = {
+    id: sessionId,
+    data: {},
+    userId: null,
+    service: null,
+    createdAt: Date.now()    
+  };
+
   try {
     const row = await knex('session')
       .where('token', sessionId)
-      .first('data');
+      .first('data', 'user_id', 'service', 'created_at');
 
-    return JSON.parse(row.data);
+    session.data = JSON.parse(row.data);
+    session.userId = row.user_id;
+    session.service = row.service;
+    session.createdAt = row.created_at;
   } catch(err) { 
     console.error(err);    
   }
 
-  return {};
+  return session;
 }
 
 export async function sessionExist(sessionId: string) {
@@ -39,22 +52,26 @@ export async function sessionExist(sessionId: string) {
   return false;
 }
 
-export async function setSessionData(sessionId: string, data: any) {
+export async function setSession(session: Session) {
   try {
-    const exist = await sessionExist(sessionId);
+    const exist = await sessionExist(session.id);
 
     if(exist) {
       await knex('session')
-        .where('token', sessionId)
+        .where('token', session.id)
         .update({
-          data: JSON.stringify(data),
+          data: JSON.stringify(session.data),
+          user_id: session.userId,
+          service: session.service,
           created_at: Date.now()
         });
     } else {
       await knex('session')
         .insert({
-          token: sessionId,
-          data: JSON.stringify(data),
+          token: session.id,
+          data: JSON.stringify(session.data),
+          user_id: session.userId,
+          service: session.service,
           created_at: Date.now()          
         });
     }

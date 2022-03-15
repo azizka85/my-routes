@@ -13,7 +13,9 @@ var en_default = {
     "Photo": "Photo",
     "Cancel": "Cancel",
     "Or use the service": "Or use the service",
-    "Auth service": "Auth service"
+    "Auth service": "Auth service",
+    "User with this email and password doesn't exist": "User with this email and password doesn't exist",
+    "User with this email already exists": "User with this email already exists"
   }
 };
 export {

@@ -10,6 +10,8 @@ export default {
     "Photo": "Фото",
     "Cancel": "Болдырмау",
     "Or use the service": "Немесе сервисті қолдаңыз",
-    "Auth service": "Аутентификация сервисі"
+    "Auth service": "Аутентификация сервисі",
+    "User with this email and password doesn't exist": "Қолданушы осындай email және парольмен табылған жоқ",
+    "User with this email already exists": "Қолданушы осындай email бар"
   }
 };
