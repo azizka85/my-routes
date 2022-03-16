@@ -3,7 +3,7 @@ import { Translator } from "@azizka/i18n";
 import knex from "../db/knex";
 import { generateMD5Hash } from '../db/helpers';
 
-import { DBResult, DBResultStatus } from "../data/db-result";
+import { Result, ResultStatus } from "../../data/result";
 import { Session } from "../data/session";
 
 import locales from './locale-helpers';
@@ -24,8 +24,8 @@ export async function signIn(
 ) {
   const translator = lang in locales ? locales[lang] : new Translator();
 
-  const result: DBResult = {
-    status: DBResultStatus.OK
+  const result: Result = {
+    status: ResultStatus.OK
   };
 
   try {
@@ -35,7 +35,7 @@ export async function signIn(
       .first('id');
 
     if(!row?.id) {
-      result.status = DBResultStatus.Error;
+      result.status = ResultStatus.Error;
       result.data = translator.translate("User with this email and password doesn't exist");
     } else {      
       session.userId = row.id;
@@ -44,7 +44,7 @@ export async function signIn(
   } catch(err) {
     console.error(err);    
 
-    result.status = DBResultStatus.Error;
+    result.status = ResultStatus.Error;
     result.data = (err as Error)?.message || err;
   }
 
@@ -61,34 +61,45 @@ export async function signUp(
 ) {
   const translator = lang in locales ? locales[lang] : new Translator();
 
-  let result: DBResult = {
-    status: DBResultStatus.OK
+  let result: Result = {
+    status: ResultStatus.OK
   };
 
-  try {
-    const exist = await emailExist(email);
-    if(exist) {
-      result.status = DBResultStatus.Error;
-      result.data = translator.translate('User with this email already exists');
-    } else {
-      await knex('user')
-        .insert({
-          full_name: name,
-          email,
-          password: generateMD5Hash(password),
-          photo,
-          created_at: Date.now(),
-          updated_at: Date.now()
-        });
-
-      result = await signIn(email, password, lang, session);
+  if(!name) {
+    result.status = ResultStatus.Error;
+    result.data = translator.translate('Name required');
+  } else if(!email) {
+    result.status = ResultStatus.Error;
+    result.data = translator.translate('Email required');
+  } else if(!password) {
+    result.status = ResultStatus.Error;
+    result.data = translator.translate('Password required');
+  } else {
+    try {
+      const exist = await emailExist(email);
+      if(exist) {
+        result.status = ResultStatus.Error;
+        result.data = translator.translate('User with this email already exists');
+      } else {
+        await knex('user')
+          .insert({
+            full_name: name,
+            email,
+            password: generateMD5Hash(password),
+            photo,
+            created_at: Date.now(),
+            updated_at: Date.now()
+          });
+  
+        result = await signIn(email, password, lang, session);
+      }
+    } catch(err) {
+      console.error(err);    
+  
+      result.status = ResultStatus.Error;
+      result.data = (err as Error)?.message || err;
     }
-  } catch(err) {
-    console.error(err);    
-
-    result.status = DBResultStatus.Error;
-    result.data = (err as Error)?.message || err;
-  }
+  }  
 
   return result;
 }

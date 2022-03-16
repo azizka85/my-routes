@@ -12,6 +12,9 @@ export default {
     "Or use the service": "Или используйте сервис",
     "Auth service": "Сервис аутентификации",
     "User with this email and password doesn't exist": "Пользователь с таким email и паролем не найден",
-    "User with this email already exists": "Пользователь с таким email уже существует"
+    "User with this email already exists": "Пользователь с таким email уже существует",
+    "Email required": "Необходимо заполнить email",
+    "Name required": "Необходимо заполнить имя",
+    "Password required": "Необходимо заполнить пароль"
   }
 };

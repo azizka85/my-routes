@@ -1640,7 +1640,10 @@ var en_default = {
     "Or use the service": "Or use the service",
     "Auth service": "Auth service",
     "User with this email and password doesn't exist": "User with this email and password doesn't exist",
-    "User with this email already exists": "User with this email already exists"
+    "User with this email already exists": "User with this email already exists",
+    "Email required": "Email required",
+    "Name required": "Name required",
+    "Password required": "Password required"
   }
 };
 
@@ -1659,7 +1662,10 @@ var ru_default = {
     "Or use the service": "\u0418\u043B\u0438 \u0438\u0441\u043F\u043E\u043B\u044C\u0437\u0443\u0439\u0442\u0435 \u0441\u0435\u0440\u0432\u0438\u0441",
     "Auth service": "\u0421\u0435\u0440\u0432\u0438\u0441 \u0430\u0443\u0442\u0435\u043D\u0442\u0438\u0444\u0438\u043A\u0430\u0446\u0438\u0438",
     "User with this email and password doesn't exist": "\u041F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u044C \u0441 \u0442\u0430\u043A\u0438\u043C email \u0438 \u043F\u0430\u0440\u043E\u043B\u0435\u043C \u043D\u0435 \u043D\u0430\u0439\u0434\u0435\u043D",
-    "User with this email already exists": "\u041F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u044C \u0441 \u0442\u0430\u043A\u0438\u043C email \u0443\u0436\u0435 \u0441\u0443\u0449\u0435\u0441\u0442\u0432\u0443\u0435\u0442"
+    "User with this email already exists": "\u041F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u044C \u0441 \u0442\u0430\u043A\u0438\u043C email \u0443\u0436\u0435 \u0441\u0443\u0449\u0435\u0441\u0442\u0432\u0443\u0435\u0442",
+    "Email required": "\u041D\u0435\u043E\u0431\u0445\u043E\u0434\u0438\u043C\u043E \u0437\u0430\u043F\u043E\u043B\u043D\u0438\u0442\u044C email",
+    "Name required": "\u041D\u0435\u043E\u0431\u0445\u043E\u0434\u0438\u043C\u043E \u0437\u0430\u043F\u043E\u043B\u043D\u0438\u0442\u044C \u0438\u043C\u044F",
+    "Password required": "\u041D\u0435\u043E\u0431\u0445\u043E\u0434\u0438\u043C\u043E \u0437\u0430\u043F\u043E\u043B\u043D\u0438\u0442\u044C \u043F\u0430\u0440\u043E\u043B\u044C"
   }
 };
 
@@ -1678,7 +1684,10 @@ var kz_default = {
     "Or use the service": "\u041D\u0435\u043C\u0435\u0441\u0435 \u0441\u0435\u0440\u0432\u0438\u0441\u0442\u0456 \u049B\u043E\u043B\u0434\u0430\u04A3\u044B\u0437",
     "Auth service": "\u0410\u0443\u0442\u0435\u043D\u0442\u0438\u0444\u0438\u043A\u0430\u0446\u0438\u044F \u0441\u0435\u0440\u0432\u0438\u0441\u0456",
     "User with this email and password doesn't exist": "\u049A\u043E\u043B\u0434\u0430\u043D\u0443\u0448\u044B \u043E\u0441\u044B\u043D\u0434\u0430\u0439 email \u0436\u04D9\u043D\u0435 \u043F\u0430\u0440\u043E\u043B\u044C\u043C\u0435\u043D \u0442\u0430\u0431\u044B\u043B\u0493\u0430\u043D \u0436\u043E\u049B",
-    "User with this email already exists": "\u049A\u043E\u043B\u0434\u0430\u043D\u0443\u0448\u044B \u043E\u0441\u044B\u043D\u0434\u0430\u0439 email \u0431\u0430\u0440"
+    "User with this email already exists": "\u049A\u043E\u043B\u0434\u0430\u043D\u0443\u0448\u044B \u043E\u0441\u044B\u043D\u0434\u0430\u0439 email \u0431\u0430\u0440",
+    "Email required": "Email \u0442\u043E\u043B\u0442\u044B\u0440\u0443 \u043A\u0435\u0440\u0435\u043A",
+    "Name required": "\u0410\u0442\u044B\u04A3\u0434\u044B \u0442\u043E\u043B\u0442\u044B\u0440\u0443 \u043A\u0435\u0440\u0435\u043A",
+    "Password required": "\u041F\u0430\u0440\u043E\u043B\u044C\u0434\u044B \u0442\u043E\u043B\u0442\u044B\u0440\u0443 \u043A\u0435\u0440\u0435\u043A"
   }
 };
 
@@ -2053,26 +2062,37 @@ async function signUp(name, email, password, photo, lang, session) {
   let result = {
     status: "OK" /* OK */
   };
-  try {
-    const exist = await emailExist(email);
-    if (exist) {
-      result.status = "Error" /* Error */;
-      result.data = translator.translate("User with this email already exists");
-    } else {
-      await knex_default("user").insert({
-        full_name: name,
-        email,
-        password: (0, import_helpers3.generateMD5Hash)(password),
-        photo,
-        created_at: Date.now(),
-        updated_at: Date.now()
-      });
-      result = await signIn(email, password, lang, session);
-    }
-  } catch (err) {
-    console.error(err);
+  if (!name) {
     result.status = "Error" /* Error */;
-    result.data = err?.message || err;
+    result.data = translator.translate("Name required");
+  } else if (!email) {
+    result.status = "Error" /* Error */;
+    result.data = translator.translate("Email required");
+  } else if (!password) {
+    result.status = "Error" /* Error */;
+    result.data = translator.translate("Password required");
+  } else {
+    try {
+      const exist = await emailExist(email);
+      if (exist) {
+        result.status = "Error" /* Error */;
+        result.data = translator.translate("User with this email already exists");
+      } else {
+        await knex_default("user").insert({
+          full_name: name,
+          email,
+          password: (0, import_helpers3.generateMD5Hash)(password),
+          photo,
+          created_at: Date.now(),
+          updated_at: Date.now()
+        });
+        result = await signIn(email, password, lang, session);
+      }
+    } catch (err) {
+      console.error(err);
+      result.status = "Error" /* Error */;
+      result.data = err?.message || err;
+    }
   }
   return result;
 }
