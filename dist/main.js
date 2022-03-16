@@ -2057,36 +2057,34 @@ async function signIn(email, password, lang, session) {
   }
   return result;
 }
-async function signUp(name, email, password, photo, lang, session) {
+async function signUp(user, lang, session) {
   const translator = lang in locale_helpers_default ? locale_helpers_default[lang] : new import_i18n3.Translator();
   let result = {
     status: "OK" /* OK */
   };
-  if (!name) {
+  if (!user.fullName) {
     result.status = "Error" /* Error */;
     result.data = translator.translate("Name required");
-  } else if (!email) {
+  } else if (!user.email) {
     result.status = "Error" /* Error */;
     result.data = translator.translate("Email required");
-  } else if (!password) {
+  } else if (!user.password) {
     result.status = "Error" /* Error */;
     result.data = translator.translate("Password required");
   } else {
     try {
-      const exist = await emailExist(email);
+      const exist = await emailExist(user.email);
       if (exist) {
         result.status = "Error" /* Error */;
         result.data = translator.translate("User with this email already exists");
       } else {
+        user.createdAt = Date.now();
+        user.updatedAt = Date.now();
         await knex_default("user").insert({
-          full_name: name,
-          email,
-          password: (0, import_helpers3.generateMD5Hash)(password),
-          photo,
-          created_at: Date.now(),
-          updated_at: Date.now()
+          ...user,
+          password: (0, import_helpers3.generateMD5Hash)(user.password)
         });
-        result = await signIn(email, password, lang, session);
+        result = await signIn(user.email, user.password, lang, session);
       }
     } catch (err) {
       console.error(err);
@@ -2228,19 +2226,19 @@ var sign_up_page_default = `<div data-page="signup-page">\r
         <form method="post" class="mb-1">\r
           <div class="form-item mb-1">\r
             <label \r
-              for="name" \r
+              for="full-name" \r
               class="form-label"            \r
             >\r
               <input \r
                 type="text" \r
-                name="name" \r
-                id="name" \r
+                name="fullName" \r
+                id="full-name" \r
                 class="form-control" \r
                 placeholder="<%= helpers.tr('Name') %>*"\r
                 required\r
               >\r
               <span \r
-                id="name-label"\r
+                id="full-name-label"\r
               >\r
                 <%= helpers.tr('Name') %>*\r
               </span>            \r
@@ -2355,7 +2353,7 @@ var routes_default3 = [{
         const postData = await getRequestData(page.state.request);
         if (page.query.ajax) {
           page.state.response.setHeader("Content-Type", "application/json;charset=UTF-8");
-          const result = await signUp(postData.name || "", postData.email || "", postData.password || "", postData.photo || "", lang, page.state.session);
+          const result = await signUp(postData, lang, page.state.session);
           page.state.response.write(JSON.stringify(result));
         } else {
           page.state.response.statusCode = 302;
@@ -2512,7 +2510,7 @@ var app_default = app;
 // src/server/helpers/session-helpers.ts
 async function clearExpiredSessions() {
   try {
-    await knex_default("session").where("created_at", "<=", Date.now() - 24 * 3600 * 1e3).del();
+    await knex_default("session").where("createdAt", "<=", Date.now() - 24 * 3600 * 1e3).del();
   } catch (err) {
     console.error(err);
   }
@@ -2526,11 +2524,11 @@ async function getSession(sessionId) {
     createdAt: Date.now()
   };
   try {
-    const row = await knex_default("session").where("token", sessionId).first("data", "user_id", "service", "created_at");
+    const row = await knex_default("session").where("token", sessionId).first("data", "userId", "service", "createdAt");
     session.data = JSON.parse(row.data);
-    session.userId = row.user_id;
+    session.userId = row.userId;
     session.service = row.service;
-    session.createdAt = row.created_at;
+    session.createdAt = row.createdAt;
   } catch (err) {
     console.error(err);
   }
@@ -2551,17 +2549,17 @@ async function setSession(session) {
     if (exist) {
       await knex_default("session").where("token", session.id).update({
         data: JSON.stringify(session.data),
-        user_id: session.userId,
+        userId: session.userId,
         service: session.service,
-        created_at: Date.now()
+        createdAt: Date.now()
       });
     } else {
       await knex_default("session").insert({
         token: session.id,
         data: JSON.stringify(session.data),
-        user_id: session.userId,
+        userId: session.userId,
         service: session.service,
-        created_at: Date.now()
+        createdAt: Date.now()
       });
     }
   } catch (err) {

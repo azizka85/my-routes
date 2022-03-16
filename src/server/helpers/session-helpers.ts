@@ -5,7 +5,7 @@ import { Session } from '../data/session';
 export async function clearExpiredSessions() {
   try {
     await knex('session')
-      .where('created_at', '<=', Date.now() - 24*3600*1000)
+      .where('createdAt', '<=', Date.now() - 24*3600*1000)
       .del();
   } catch(err) {
     console.error(err);    
@@ -24,12 +24,12 @@ export async function getSession(sessionId: string) {
   try {
     const row = await knex('session')
       .where('token', sessionId)
-      .first('data', 'user_id', 'service', 'created_at');
+      .first('data', 'userId', 'service', 'createdAt');
 
     session.data = JSON.parse(row.data);
-    session.userId = row.user_id;
+    session.userId = row.userId;
     session.service = row.service;
-    session.createdAt = row.created_at;
+    session.createdAt = row.createdAt;
   } catch(err) { 
     console.error(err);    
   }
@@ -61,18 +61,18 @@ export async function setSession(session: Session) {
         .where('token', session.id)
         .update({
           data: JSON.stringify(session.data),
-          user_id: session.userId,
+          userId: session.userId,
           service: session.service,
-          created_at: Date.now()
+          createdAt: Date.now()
         });
     } else {
       await knex('session')
         .insert({
           token: session.id,
           data: JSON.stringify(session.data),
-          user_id: session.userId,
+          userId: session.userId,
           service: session.service,
-          created_at: Date.now()          
+          createdAt: Date.now()          
         });
     }
   } catch(err) {

@@ -4,6 +4,7 @@ import knex from "../db/knex";
 import { generateMD5Hash } from '../db/helpers';
 
 import { Result, ResultStatus } from "../../data/result";
+import { User } from "../../data/user";
 import { Session } from "../data/session";
 
 import locales from './locale-helpers';
@@ -52,10 +53,7 @@ export async function signIn(
 }
 
 export async function signUp(
-  name: string, 
-  email: string, 
-  password: string, 
-  photo: string,
+  user: User,
   lang: string, 
   session: Session
 ) {
@@ -65,33 +63,31 @@ export async function signUp(
     status: ResultStatus.OK
   };
 
-  if(!name) {
+  if(!user.fullName) {
     result.status = ResultStatus.Error;
     result.data = translator.translate('Name required');
-  } else if(!email) {
+  } else if(!user.email) {
     result.status = ResultStatus.Error;
     result.data = translator.translate('Email required');
-  } else if(!password) {
+  } else if(!user.password) {
     result.status = ResultStatus.Error;
     result.data = translator.translate('Password required');
   } else {
     try {
-      const exist = await emailExist(email);
+      const exist = await emailExist(user.email);
       if(exist) {
         result.status = ResultStatus.Error;
         result.data = translator.translate('User with this email already exists');
       } else {
-        await knex('user')
-          .insert({
-            full_name: name,
-            email,
-            password: generateMD5Hash(password),
-            photo,
-            created_at: Date.now(),
-            updated_at: Date.now()
-          });
+        user.createdAt = Date.now();
+        user.updatedAt = Date.now();
+
+        await knex<User>('user').insert({
+          ...user,
+          password: generateMD5Hash(user.password)
+        });
   
-        result = await signIn(email, password, lang, session);
+        result = await signIn(user.email, user.password, lang, session);
       }
     } catch(err) {
       console.error(err);    

@@ -57,8 +57,8 @@ var _SignUpPage = class {
     const form = this.node?.querySelector(".main-card form");
     this.titleElem = this.node?.querySelector('[data-title="main"]') || null;
     this.emailInputElem = form?.querySelector("#email") || null;
-    this.nameInputElem = form?.querySelector("#name") || null;
-    this.nameLabelElem = form?.querySelector("#name-label") || null;
+    this.nameInputElem = form?.querySelector("#full-name") || null;
+    this.nameLabelElem = form?.querySelector("#full-name-label") || null;
     this.passwordInputElem = form?.querySelector("#password") || null;
     this.passwordLabelElem = form?.querySelector("#password-label") || null;
     this.photoInputElem = form?.querySelector("#photo") || null;

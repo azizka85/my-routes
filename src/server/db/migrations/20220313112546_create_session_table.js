@@ -8,7 +8,7 @@
     table.text('data');
 
     table
-      .integer('user_id')
+      .integer('userId')
       .unsigned()
       .references('id')
       .inTable('user')
@@ -16,7 +16,7 @@
     table.text('service');
       
     table
-      .timestamp('created_at')
+      .timestamp('createdAt')
       .notNullable();
   });
 };

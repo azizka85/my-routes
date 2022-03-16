@@ -4,17 +4,17 @@
 exports.up = function(knex) {
   return knex.schema.createTable('user', table => {
     table.increments('id');
-    table.text('full_name').notNullable();
+    table.text('fullName').notNullable();
     table.text('email').notNullable();
     table.text('password').notNullable();
     table.text('photo').notNullable();
     
     table
-      .timestamp('created_at')
+      .timestamp('createdAt')
       .notNullable();
 
     table
-      .timestamp('updated_at')
+      .timestamp('updatedAt')
       .notNullable();
   })
 };
