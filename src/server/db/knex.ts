@@ -4,7 +4,7 @@ import configs from '../../../knexfile';
 
 import '../init-environment';
 
-const environment = process.env.NODE_ENV !== 'production' ? 'development' : 'production';
+const environment = process.env.NODE_ENV || 'development';
 
 const config = configs[environment];
 

@@ -20,6 +20,18 @@ module.exports = {
     useNullAsDefault: true
   },
 
+  test: {
+    client: 'better-sqlite3',
+    connection: ":memory:",
+    migrations: {
+      directory: join(cwd(), 'src/server/db/migrations')
+    },
+    seeds: {
+      directory: join(cwd(), 'src/server/db/seeds')
+    },
+    useNullAsDefault: true
+  },
+
   production: {
     client: 'postgresql',
     connection: {
