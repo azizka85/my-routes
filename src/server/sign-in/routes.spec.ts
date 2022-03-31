@@ -28,6 +28,15 @@ jest.mock('../helpers', () => {
 });
 
 describe('sign-in routes test', () => {  
+  beforeAll(async () => {
+    await knex.migrate.latest();
+    await knex.seed.run();
+  });
+
+  afterAll(async () => {
+    await knex.destroy();
+  });
+
   test('should load page "/sign-in" correctly', async () => {
     let contentType;
     let contentExist = false;
@@ -138,9 +147,6 @@ describe('sign-in routes test', () => {
   });
 
   test('should correctly process sign-in using post data with ajax', async () => {
-    await knex.migrate.latest();
-    await knex.seed.run();
-
     let contentType = '';
     let correctProcessed = false;
 
@@ -180,7 +186,5 @@ describe('sign-in routes test', () => {
     expect(state.response.statusCode).toEqual(200);
     expect(correctProcessed).toBeFalsy();
     expect(contentType).toEqual('application/json;charset=UTF-8');
-
-    await knex.destroy();
   });
 });
