@@ -112,7 +112,7 @@ describe('sign-in routes test', () => {
     expect(contentType).toEqual('application/json;charset=UTF-8');
   });
 
-  test('should correctly process sign-in using post data with ajax', async () => {
+  test('should correctly process sign-in using post data', async () => {
     let location = '';
 
     const state = {
