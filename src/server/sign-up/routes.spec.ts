@@ -8,6 +8,9 @@ describe('sign-up routes test', () => {
     let contentExist = false;
 
     const state = ({
+      request: {
+        method: 'GET'
+      },
       response: {
         statusCode: 200,
         setHeader(name: string, value: string) {
@@ -33,6 +36,9 @@ describe('sign-up routes test', () => {
     let contentExist = false;
 
     const state = ({
+      request: {
+        method: 'GET'
+      },
       response: {
         statusCode: 200,
         setHeader(name: string, value: string) {
@@ -58,6 +64,9 @@ describe('sign-up routes test', () => {
     let contentExist = false;
 
     const state = ({
+      request: {
+        method: 'GET'
+      },
       response: {
         statusCode: 200,
         setHeader(name: string, value: string) {
