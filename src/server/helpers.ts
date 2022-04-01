@@ -1,6 +1,7 @@
 import { lstatSync, readFileSync } from 'fs';
 import { IncomingMessage, ServerResponse } from 'http';
 import { randomBytes } from 'crypto';
+import querystring from 'querystring';
 
 import { trimSlashes, parseQuery, Page } from '@azizka/router';
 
@@ -63,7 +64,7 @@ export async function getRequestData(request: IncomingMessage) {
 
   const data = Buffer.concat(chunks).toString();
 
-  return JSON.parse(data);
+  return querystring.parse(data);
 }
 
 export function generateId() {

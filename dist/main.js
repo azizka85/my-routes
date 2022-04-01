@@ -1170,6 +1170,17 @@ var require_knexfile = __commonJS({
         },
         useNullAsDefault: true
       },
+      test: {
+        client: "better-sqlite3",
+        connection: ":memory:",
+        migrations: {
+          directory: join2(cwd(), "src/server/db/migrations")
+        },
+        seeds: {
+          directory: join2(cwd(), "src/server/db/seeds")
+        },
+        useNullAsDefault: true
+      },
       production: {
         client: "postgresql",
         connection: {
@@ -2098,6 +2109,7 @@ async function signUp(user, lang, session) {
 // src/server/helpers.ts
 var import_fs = require("fs");
 var import_crypto = require("crypto");
+var import_querystring = __toESM(require("querystring"));
 var import_router2 = __toESM(require_router2());
 function fragment(path, root) {
   let value = decodeURI(path);
@@ -2141,7 +2153,7 @@ async function getRequestData(request2) {
     chunks.push(chunk);
   }
   const data = Buffer.concat(chunks).toString();
-  return JSON.parse(data);
+  return import_querystring.default.parse(data);
 }
 function generateId() {
   return (0, import_crypto.randomBytes)(48).toString("hex");
@@ -2191,7 +2203,7 @@ var routes_default2 = [{
           page.state.response.write(JSON.stringify(result));
         } else {
           page.state.response.statusCode = 302;
-          page.state.response.setHeader("location", encodeURI(lang === DEFAULT_LANGUAGE ? "sign-in" : `${lang}/sign-in`));
+          page.state.response.setHeader("location", encodeURI(lang === DEFAULT_LANGUAGE ? "/sign-in" : `/${lang}/sign-in`));
         }
       } else {
         const data = {};

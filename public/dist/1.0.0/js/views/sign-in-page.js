@@ -5,7 +5,8 @@ import {
   DEFAULT_LANGUAGE,
   context,
   loadContent,
-  navigateHandler
+  navigateHandler,
+  routeNavigator
 } from "../chunk-L5HFSNW6.js";
 import {
   __publicField
@@ -13,6 +14,7 @@ import {
 
 // src/client/views/pages/sign-in-page.ts
 var _SignInPage = class {
+  lang = DEFAULT_LANGUAGE;
   node = null;
   titleElem = null;
   emailInputElem = null;
@@ -32,14 +34,29 @@ var _SignInPage = class {
     return _SignInPage.page;
   }
   constructor() {
-    this.formSubmitHandler = (event) => {
+    this.formSubmitHandler = async (event) => {
       event.preventDefault();
       const form = this.node?.querySelector(".main-card form");
       const data = new FormData(form);
-      console.log("Form submited: ");
+      const params = new URLSearchParams();
       data.forEach((value, key) => {
-        console.log(key + ":", value);
+        params.append(key, value.toString());
       });
+      try {
+        const response = await fetch(`${location.pathname}?ajax=1`, {
+          method: "post",
+          body: params
+        });
+        if (response.status === 200) {
+          const resData = await response.json();
+          if (resData.status === "OK" /* OK */) {
+            routeNavigator.redirectTo((this.lang === DEFAULT_LANGUAGE ? "" : `/${this.lang}`) + "/");
+          } else {
+            console.error(resData.data);
+          }
+        }
+      } finally {
+      }
     };
     this.signUpBtnClickHandler = (event) => navigateHandler(event, this.signUpBtn);
     this.cancelBtnClickHandler = (event) => navigateHandler(event, this.cancelBtn);
@@ -75,6 +92,7 @@ var _SignInPage = class {
     this.cancelBtn?.removeEventListener("click", this.cancelBtnClickHandler);
   }
   async load(lang, page, firstLoad) {
+    this.lang = lang;
     if (this.titleElem) {
       this.titleElem.textContent = context.tr("Sign In");
     }

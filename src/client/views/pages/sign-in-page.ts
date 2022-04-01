@@ -4,14 +4,17 @@ import { View } from '../view';
 
 import { AuthServiceComponent } from '../components/auth-service-component';
 
+import { Result, ResultStatus } from '../../../data/result';
+
 import { loadContent, navigateHandler } from '../../helpers';
 
-import { context } from '../../globals';
-
+import { context, routeNavigator } from '../../globals';
 import { DEFAULT_LANGUAGE } from '../../../globals';
 
 export class SignInPage implements View {
   protected static page: SignInPage | null = null;
+
+  protected lang: string = DEFAULT_LANGUAGE;
 
   protected node: HTMLElement | null = null;
 
@@ -42,17 +45,38 @@ export class SignInPage implements View {
   }
 
   constructor() {
-    this.formSubmitHandler = event => {
+    this.formSubmitHandler = async (event) => {
       event.preventDefault();
 
       const form = this.node?.querySelector('.main-card form') as HTMLFormElement;
       const data = new FormData(form as HTMLFormElement);
 
-      console.log('Form submited: ');  
-      
+      const params = new URLSearchParams();
+
       data.forEach((value, key) => {
-        console.log(key + ':', value);          
-      });    
+        params.append(key, value.toString());
+      });
+
+      try {
+        const response = await fetch(`${location.pathname}?ajax=1`, {
+          method: 'post',
+          body: params
+        });
+        
+        if(response.status === 200) {
+          const resData = await response.json() as Result;
+  
+          if(resData.status === ResultStatus.OK) {
+            routeNavigator.redirectTo(
+              (this.lang === DEFAULT_LANGUAGE ? '' : `/${this.lang}`) + '/'
+            );
+          } else {
+            console.error(resData.data);          
+          }
+        }
+      } finally {
+
+      }
     };
 
     this.signUpBtnClickHandler = event => navigateHandler(event, this.signUpBtn as HTMLElement);
@@ -104,6 +128,8 @@ export class SignInPage implements View {
   }
 
   async load(lang: string, page: Page, firstLoad: boolean): Promise<void> {
+    this.lang = lang;
+
     if(this.titleElem) {
       this.titleElem.textContent = context.tr('Sign In');
     }

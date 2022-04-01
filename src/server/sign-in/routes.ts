@@ -6,6 +6,7 @@ import { Page } from "@azizka/router";
 
 import { RouteOptions } from "../data/route-options";
 import { RouteState } from "../data/route-state";
+import { User } from "../../data/user";
 
 import { renderPage } from '../helpers/layout-helpers';
 import { signIn } from "../helpers/user-helpers";
@@ -23,7 +24,7 @@ export default [{
       const lang = page.match?.[0] || DEFAULT_LANGUAGE; 
       
       if(page.state.request.method === 'POST') {
-        const postData = await getRequestData(page.state.request);
+        const postData = await getRequestData(page.state.request) as User;
 
         if(page.query.ajax) {
           page.state.response.setHeader('Content-Type', 'application/json;charset=UTF-8');
@@ -40,7 +41,7 @@ export default [{
           page.state.response.statusCode = 302;
           page.state.response.setHeader(
             'location', 
-            encodeURI(lang === DEFAULT_LANGUAGE ? 'sign-in' : `${lang}/sign-in`)
+            encodeURI(lang === DEFAULT_LANGUAGE ? '/sign-in' : `/${lang}/sign-in`)
           );
         }
       } else {
