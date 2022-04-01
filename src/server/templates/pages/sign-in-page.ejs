@@ -44,7 +44,7 @@
           <div style="text-align: right;" class="mb-1">
             <a 
               class="btn btn-light" 
-              href="<%= data.rootLink %>sign-up" 
+              href="<%= data.rootLink %><%= data.lang %>/sign-up" 
               data-button="sign-up"
             >
               <%= helpers.tr('Sign Up') %> 
@@ -60,7 +60,7 @@
             </button>
             <a 
               class="btn btn-danger" 
-              href="<%= data.rootLink %> "
+              href="<%= data.rootLink %><%= data.lang %>/"
               data-button="cancel"
             >
               <%= helpers.tr('Cancel') %> 

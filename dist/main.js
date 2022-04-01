@@ -1950,7 +1950,7 @@ var sign_in_page_default = `<div data-page="signin-page">\r
           <div style="text-align: right;" class="mb-1">\r
             <a \r
               class="btn btn-light" \r
-              href="<%= data.rootLink %>sign-up" \r
+              href="<%= data.rootLink %><%= data.lang %>/sign-up" \r
               data-button="sign-up"\r
             >\r
               <%= helpers.tr('Sign Up') %> \r
@@ -1966,7 +1966,7 @@ var sign_in_page_default = `<div data-page="signin-page">\r
             </button>\r
             <a \r
               class="btn btn-danger" \r
-              href="<%= data.rootLink %> "\r
+              href="<%= data.rootLink %><%= data.lang %>/"\r
               data-button="cancel"\r
             >\r
               <%= helpers.tr('Cancel') %> \r
@@ -2197,13 +2197,17 @@ var routes_default2 = [{
       const lang = page.match?.[0] || DEFAULT_LANGUAGE;
       if (page.state.request.method === "POST") {
         const postData = await getRequestData(page.state.request);
+        const result = await signIn(postData.email || "", postData.password || "", lang, page.state.session);
         if (page.query.ajax) {
           page.state.response.setHeader("Content-Type", "application/json;charset=UTF-8");
-          const result = await signIn(postData.email || "", postData.password || "", lang, page.state.session);
           page.state.response.write(JSON.stringify(result));
         } else {
           page.state.response.statusCode = 302;
-          page.state.response.setHeader("location", encodeURI(lang === DEFAULT_LANGUAGE ? "/sign-in" : `/${lang}/sign-in`));
+          if (result.status === "OK" /* OK */) {
+            page.state.response.setHeader("location", encodeURI(lang === DEFAULT_LANGUAGE ? "/" : `/${lang}/`));
+          } else {
+            page.state.response.setHeader("location", encodeURI((lang === DEFAULT_LANGUAGE ? "/sign-in" : `/${lang}/sign-in`) + `?error=${result.data}`));
+          }
         }
       } else {
         const data = {};
@@ -2316,7 +2320,7 @@ var sign_up_page_default = `<div data-page="signup-page">\r
           <div style="text-align: right;" class="mb-1">\r
             <a \r
               class="btn btn-light" \r
-              href="<%= data.rootLink %>sign-in"\r
+              href="<%= data.rootLink %><%= data.lang %>/sign-in"\r
               data-button="sign-in"\r
             >\r
               <%= helpers.tr('Sign In') %> \r
@@ -2332,7 +2336,7 @@ var sign_up_page_default = `<div data-page="signup-page">\r
             </button>\r
             <a \r
               class="btn btn-danger" \r
-              href="<%= data.rootLink %>"\r
+              href="<%= data.rootLink %><%= data.lang %>/"\r
               data-button="cancel"\r
             >\r
               <%= helpers.tr('Cancel') %> \r
@@ -2363,13 +2367,17 @@ var routes_default3 = [{
       const lang = page.match?.[0] || DEFAULT_LANGUAGE;
       if (page.state.request.method === "POST") {
         const postData = await getRequestData(page.state.request);
+        const result = await signUp(postData, lang, page.state.session);
         if (page.query.ajax) {
           page.state.response.setHeader("Content-Type", "application/json;charset=UTF-8");
-          const result = await signUp(postData, lang, page.state.session);
           page.state.response.write(JSON.stringify(result));
         } else {
           page.state.response.statusCode = 302;
-          page.state.response.setHeader("location", encodeURI(lang === DEFAULT_LANGUAGE ? "sign-up" : `${lang}/sign-up`));
+          if (result.status === "OK" /* OK */) {
+            page.state.response.setHeader("location", encodeURI(lang === DEFAULT_LANGUAGE ? "/" : `/${lang}/`));
+          } else {
+            page.state.response.setHeader("location", encodeURI((lang === DEFAULT_LANGUAGE ? "/sign-up" : `/${lang}/sign-up`) + `?error=${result.data}`));
+          }
         }
       } else {
         const data = {};
