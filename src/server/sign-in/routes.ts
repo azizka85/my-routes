@@ -7,6 +7,7 @@ import { Page } from "@azizka/router";
 import { RouteOptions } from "../data/route-options";
 import { RouteState } from "../data/route-state";
 import { User } from "../../data/user";
+import { ResultStatus } from "../../data/result";
 
 import { renderPage } from '../helpers/layout-helpers';
 import { signIn } from "../helpers/user-helpers";
@@ -26,23 +27,30 @@ export default [{
       if(page.state.request.method === 'POST') {
         const postData = await getRequestData(page.state.request) as User;
 
+        const result = await signIn(
+          postData.email || '',
+          postData.password || '',
+          lang,
+          page.state.session
+        );
+
         if(page.query.ajax) {
-          page.state.response.setHeader('Content-Type', 'application/json;charset=UTF-8');
-
-          const result = await signIn(
-            postData.email || '',
-            postData.password || '',
-            lang,
-            page.state.session
-          );
-
+          page.state.response.setHeader('Content-Type', 'application/json;charset=UTF-8');        
           page.state.response.write(JSON.stringify(result));  
         } else {
           page.state.response.statusCode = 302;
-          page.state.response.setHeader(
-            'location', 
-            encodeURI(lang === DEFAULT_LANGUAGE ? '/sign-in' : `/${lang}/sign-in`)
-          );
+          
+          if(result.status === ResultStatus.OK) {
+            page.state.response.setHeader(
+              'location', 
+              encodeURI(lang === DEFAULT_LANGUAGE ? '/' : `/${lang}/`)
+            );
+          } else {
+            page.state.response.setHeader(
+              'location', 
+              encodeURI((lang === DEFAULT_LANGUAGE ? '/sign-in' : `/${lang}/sign-in`) + `?error=${result.data}`)
+            );
+          }
         }
       } else {
         const data = {};

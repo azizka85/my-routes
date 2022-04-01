@@ -16,6 +16,7 @@ import { localeRoute } from '../../helpers';
 import { DEFAULT_LANGUAGE, PAGE_ROOT } from '../../globals';
 
 import { version } from '../../../package.json';
+import { ResultStatus } from "../../data/result";
 
 export default [{
   rule: `${localeRoute}/?sign-up`,
@@ -26,22 +27,29 @@ export default [{
       if(page.state.request.method === 'POST') {
         const postData = await getRequestData(page.state.request) as User;
 
+        const result = await signUp(
+          postData,
+          lang,
+          page.state.session
+        );
+
         if(page.query.ajax) {
-          page.state.response.setHeader('Content-Type', 'application/json;charset=UTF-8');
-
-          const result = await signUp(
-            postData,
-            lang,
-            page.state.session
-          );
-
+          page.state.response.setHeader('Content-Type', 'application/json;charset=UTF-8');          
           page.state.response.write(JSON.stringify(result));  
         } else {
           page.state.response.statusCode = 302;
-          page.state.response.setHeader(
-            'location', 
-            encodeURI(lang === DEFAULT_LANGUAGE ? '/sign-up' : `/${lang}/sign-up`)
-          );
+
+          if(result.status === ResultStatus.OK) {
+            page.state.response.setHeader(
+              'location',
+              encodeURI(lang === DEFAULT_LANGUAGE ? '/' : `/${lang}/`)
+            );
+          } else {            
+            page.state.response.setHeader(
+              'location', 
+              encodeURI((lang === DEFAULT_LANGUAGE ? '/sign-up' : `/${lang}/sign-up`) + `?error=${result.data}`)
+            );
+          }
         }
       } else {
         const data = {};
