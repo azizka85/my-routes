@@ -40,7 +40,7 @@ export default [{
           page.state.response.statusCode = 302;
           page.state.response.setHeader(
             'location', 
-            encodeURI(lang === DEFAULT_LANGUAGE ? 'sign-up' : `${lang}/sign-up`)
+            encodeURI(lang === DEFAULT_LANGUAGE ? '/sign-up' : `/${lang}/sign-up`)
           );
         }
       } else {
