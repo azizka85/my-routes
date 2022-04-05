@@ -1,4 +1,7 @@
+import { UserActionSetInfo } from './data/user';
+
 import { routeNavigator, layouts as globalLayouts } from "./globals";
+import { DEFAULT_LANGUAGE } from '../globals';
 
 export async function sleep(ms?: number) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -61,5 +64,17 @@ export async function unmount(elem: HTMLElement | null) {
     elem.classList.add('page-unmount');
 
     await sleep(250);
+  }
+}
+
+export function signOut(redirect?: string) {
+  globalLayouts['main-layout']?.performAction?.(UserActionSetInfo, null);
+
+  fetch('/auth/sign-out?ajax=1');
+
+  if(redirect) {
+    routeNavigator.redirectTo(redirect);
+  } else {
+    routeNavigator.redirectTo('/');
   }
 }

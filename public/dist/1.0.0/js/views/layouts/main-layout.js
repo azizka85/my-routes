@@ -2,7 +2,7 @@ import {
   BaseLayout,
   changeLangPath,
   toggleQueryParameter
-} from "../../chunk-NCOTFIR5.js";
+} from "../../chunk-MUOYOJ6Q.js";
 import {
   SCROLL_THRESHOLD,
   ScrollActionTo,
@@ -12,9 +12,10 @@ import {
 import {
   DEFAULT_LANGUAGE,
   LANGUAGES,
+  UserActionSetInfo,
   context,
   navigateHandler
-} from "../../chunk-L5HFSNW6.js";
+} from "../../chunk-7FYKLDJF.js";
 import {
   __publicField
 } from "../../chunk-U3RQVIYY.js";
@@ -28,6 +29,9 @@ var _MainLayout = class extends BaseLayout {
   searchIcon = null;
   headerIconElem = null;
   headerIconBtn = null;
+  drawerAccountPhoto = null;
+  drawerAccountIcon = null;
+  userNameElem = null;
   signInUpElem = null;
   signOutElem = null;
   list = null;
@@ -43,6 +47,7 @@ var _MainLayout = class extends BaseLayout {
   addDrawerHoverClassHandler;
   removeDrawerHoverClassHandler;
   signInUpElemClickHandler;
+  signOutElemClickHandler;
   langListItemClickHandlers = [];
   searchInputFocusHandler;
   searchIconRightClickHandler;
@@ -63,6 +68,7 @@ var _MainLayout = class extends BaseLayout {
     this.addDrawerHoverClassHandler = () => this.drawerElem?.classList.add("drawer-hover");
     this.removeDrawerHoverClassHandler = () => this.drawerElem?.classList.remove("drawer-hover");
     this.signInUpElemClickHandler = (event) => navigateHandler(event, this.signInUpElem);
+    this.signOutElemClickHandler = (event) => navigateHandler(event, this.signOutElem);
     this.searchInputFocusHandler = () => this.searchPanel?.classList.add("search-focus");
     this.searchIconRightClickHandler = () => {
       if (this.searchInput) {
@@ -119,6 +125,9 @@ var _MainLayout = class extends BaseLayout {
       this.headerIconBtn = this.drawerElem?.querySelector('[data-button="header-navigation"]') || null;
       this.headerIconElem = this.headerIconBtn?.querySelector('[data-icon="header-navigation-icon"]') || null;
       const drawerAccountBar = this.drawerElem?.querySelector(".drawer-account-bar");
+      this.drawerAccountPhoto = drawerAccountBar?.querySelector(".drawer-account-bar-avatar-photo") || null;
+      this.drawerAccountIcon = drawerAccountBar?.querySelector(".drawer-account-bar-avatar-icon") || null;
+      this.userNameElem = drawerAccountBar?.querySelector('[data-content="user-name"]') || null;
       this.signInUpElem = drawerAccountBar?.querySelector('[data-content="sign-in-up"]') || null;
       this.signOutElem = drawerAccountBar?.querySelector('[data-content="sign-out"]') || null;
       const drawerLangBar = this.drawerElem?.querySelector(".drawer-lang-bar");
@@ -139,6 +148,7 @@ var _MainLayout = class extends BaseLayout {
     const drawerAccountBar = this.drawerElem?.querySelector(".drawer-account-bar");
     drawerAccountBar?.addEventListener("mouseenter", this.addDrawerHoverClassHandler);
     this.signInUpElem?.addEventListener("click", this.signInUpElemClickHandler);
+    this.signOutElem?.addEventListener("click", this.signOutElemClickHandler);
     const drawerLangBar = this.drawerElem?.querySelector(".drawer-lang-bar");
     drawerLangBar?.addEventListener("mouseenter", this.addDrawerHoverClassHandler);
     const drawerLangCheckbox = drawerLangBar?.querySelector('input[type="checkbox"]');
@@ -178,6 +188,7 @@ var _MainLayout = class extends BaseLayout {
     const drawerAccountBar = this.drawerElem?.querySelector(".drawer-account-bar");
     drawerAccountBar?.removeEventListener("mouseenter", this.addDrawerHoverClassHandler);
     this.signInUpElem?.removeEventListener("click", this.signInUpElemClickHandler);
+    this.signOutElem?.removeEventListener("click", this.signOutElemClickHandler);
     const drawerLangBar = this.drawerElem?.querySelector(".drawer-lang-bar");
     drawerLangBar?.removeEventListener("mouseenter", this.addDrawerHoverClassHandler);
     if (this.langList) {
@@ -275,6 +286,47 @@ var _MainLayout = class extends BaseLayout {
           behavior: data?.noSmooth ? "auto" : "smooth"
         });
         break;
+      case UserActionSetInfo:
+        this.setUserInfo(data);
+        break;
+    }
+  }
+  setUserInfo(data) {
+    if (!data) {
+      if (this.drawerAccountPhoto) {
+        this.drawerAccountPhoto.style.display = "none";
+      }
+      if (this.drawerAccountIcon) {
+        this.drawerAccountIcon.style.display = "";
+      }
+      if (this.userNameElem) {
+        this.userNameElem.style.display = "none";
+      }
+      if (this.signOutElem) {
+        this.signOutElem.style.display = "none";
+      }
+      if (this.signInUpElem) {
+        this.signInUpElem.style.display = "";
+      }
+    } else {
+      if (this.drawerAccountPhoto) {
+        this.drawerAccountPhoto.style.display = "";
+        this.drawerAccountPhoto.src = data.photo;
+        this.drawerAccountPhoto.alt = data.fullName;
+      }
+      if (this.drawerAccountIcon) {
+        this.drawerAccountIcon.style.display = "none";
+      }
+      if (this.userNameElem) {
+        this.userNameElem.style.display = "";
+        this.userNameElem.textContent = data.fullName;
+      }
+      if (this.signOutElem) {
+        this.signOutElem.style.display = "";
+      }
+      if (this.signInUpElem) {
+        this.signInUpElem.style.display = "none";
+      }
     }
   }
 };

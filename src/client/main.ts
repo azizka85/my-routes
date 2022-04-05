@@ -5,7 +5,7 @@ import { TaskData } from './data/task-data';
 import { LoaderPage } from './views/pages/loader-page';
 
 import { loadPage } from './helpers/view-helpers';
-
+import { signOut } from './helpers';
 import { localeRoute } from '../helpers';
 
 import { router, routeNavigator } from './globals';
@@ -59,6 +59,12 @@ window.addEventListener('DOMContentLoaded', () => {
         [], 
         firstTime
       );
+    }
+  }, {
+    rule: 'auth/sign-out',
+    async handler(page) {
+      queue.stop();
+      queue.addTask(() => signOut(page.query.redirect));
     }
   }]);
 

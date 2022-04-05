@@ -6,6 +6,7 @@ import { RouteState } from "../data/route-state";
 import homePage from "../templates/pages/home-page";
 
 import { renderPage, stringToArray, getLayoutHandlers } from '../helpers/layout-helpers';
+import { getUserInfoFromSession } from '../helpers/user-helpers';
 
 import { localeRoute } from '../../helpers';
 
@@ -17,7 +18,8 @@ export default [{
   rule: `${localeRoute}/?`,
   async handler(page: Page<RouteOptions, RouteState>) {
     if(page.state) {
-      const lang = page.match?.[0] || DEFAULT_LANGUAGE;    
+      const lang = page.match?.[0] || DEFAULT_LANGUAGE;  
+      const user = await getUserInfoFromSession(page.state.session);  
 
       const data = {
         time: Date.now()
@@ -44,7 +46,8 @@ export default [{
             'home-page', 
             homePage, 
             data,
-            layoutHandlers            
+            layoutHandlers,
+            user
           )
         );        
       }   

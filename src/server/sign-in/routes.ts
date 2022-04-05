@@ -10,8 +10,8 @@ import { User } from "../../data/user";
 import { ResultStatus } from "../../data/result";
 
 import { renderPage } from '../helpers/layout-helpers';
-import { signIn } from "../helpers/user-helpers";
-import { getRequestData } from '../helpers';
+import { signIn, getUserInfoFromSession } from "../helpers/user-helpers";
+import { getUrlData } from '../helpers';
 import { localeRoute } from '../../helpers';
 
 import { DEFAULT_LANGUAGE, PAGE_ROOT } from '../../globals';
@@ -23,9 +23,10 @@ export default [{
   async handler(page: Page<RouteOptions, RouteState>) {
     if(page.state) {
       const lang = page.match?.[0] || DEFAULT_LANGUAGE; 
+      const user = await getUserInfoFromSession(page.state.session); 
       
       if(page.state.request.method === 'POST') {
-        const postData = await getRequestData(page.state.request) as User;
+        const postData = await getUrlData(page.state.request) as User;
 
         const result = await signIn(
           postData.email || '',
@@ -71,6 +72,7 @@ export default [{
               signInPage, 
               data,
               undefined,
+              user,
               {
                 'auth-service-component': authServiceComponent
               }            

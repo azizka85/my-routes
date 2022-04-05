@@ -970,7 +970,7 @@ var require_utils3 = __commonJS({
 var require_translator = __commonJS({
   "node_modules/@azizka/i18n/src/translator.js"(exports, module2) {
     var { isObject } = require_utils3();
-    var Translator4 = class {
+    var Translator5 = class {
       data;
       globalContext;
       extension;
@@ -978,7 +978,7 @@ var require_translator = __commonJS({
         this.resetContext();
       }
       static create(data) {
-        const translator = new Translator4();
+        const translator = new Translator5();
         translator.add(data);
         return translator;
       }
@@ -1134,7 +1134,7 @@ var require_translator = __commonJS({
       }
     };
     module2.exports = {
-      Translator: Translator4
+      Translator: Translator5
     };
   }
 });
@@ -1142,10 +1142,10 @@ var require_translator = __commonJS({
 // node_modules/@azizka/i18n/index.js
 var require_i18n = __commonJS({
   "node_modules/@azizka/i18n/index.js"(exports, module2) {
-    var { Translator: Translator4 } = require_translator();
+    var { Translator: Translator5 } = require_translator();
     var { isObject } = require_utils3();
     module2.exports = {
-      Translator: Translator4,
+      Translator: Translator5,
       isObject
     };
   }
@@ -1459,49 +1459,52 @@ var main_layout_default = `<div data-layout="main-layout">\r
     <div class="drawer-content">\r
       <div class="drawer-account-bar">\r
         <div class="drawer-account-bar-avatar">   \r
-          <% if(data.user) { %>   \r
-            <img \r
-              src="<%= data.user.photo %>" \r
-              alt="<%= data.user.name %>"\r
-              class="drawer-account-bar-avatar-photo"\r
-            >\r
-          <% } else { %>\r
-            <svg class="drawer-account-bar-avatar-icon" viewBox="0 0 16 16">\r
-              <path \r
-                d="\r
-                  M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 \r
-                  0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 \r
-                  10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z\r
-                "\r
-              />\r
-            </svg>\r
-          <% } %> \r
+          <img \r
+            src="<%= data.user?.photo %>" \r
+            alt="<%= data.user?.fullName %>"\r
+            class="drawer-account-bar-avatar-photo"\r
+            <% if(!data.user) { %>\r
+              style="display: none"\r
+            <% } %>\r
+          >\r
+          <svg \r
+            class="drawer-account-bar-avatar-icon" \r
+            viewBox="0 0 16 16"\r
+            <% if(data.user) { %>\r
+              style="display: none"\r
+            <% } %>\r
+          >\r
+            <path \r
+              d="\r
+                M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 \r
+                0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 \r
+                10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z\r
+              "\r
+            />\r
+          </svg>          \r
         </div>\r
         <div class="drawer-account-bar-actions">   \r
-          <% if(data.user) { %>   \r
-            <a \r
-              href="#"\r
-              data-content="user-name"\r
-              style="white-space: nowrap; overflow: hidden;"\r
-            >\r
-              <%= data.user.name %>\r
-            </a>\r
-            <a \r
-              href="/auth/sign-out?redirect=/<%= data.lang %>/sign-in" \r
-              data-content="sign-out"\r
-              style="white-space: nowrap; overflow: hidden;"\r
-            >\r
-              <%= helpers.tr('Sign Out') %>\r
-            </a>\r
-          <% } else { %>  \r
-            <a \r
-              href="/<%= data.lang %>/sign-in" \r
-              data-content="sign-in-up"\r
-              style="white-space: nowrap; overflow: hidden;"\r
-            >\r
-              <%= helpers.tr('Sign In/Up') %>\r
-            </a>\r
-          <% } %>       \r
+          <a \r
+            href="#"\r
+            data-content="user-name"\r
+            style="white-space: nowrap; overflow: hidden; <%= !data.user ? 'display: none' : '' %>"\r
+          >\r
+            <%= data.user?.fullName %>\r
+          </a>\r
+          <a \r
+            href="/auth/sign-out?redirect=/<%= data.lang %>/sign-in" \r
+            data-content="sign-out"\r
+            style="white-space: nowrap; overflow: hidden; <%= !data.user ? 'display: none' : '' %>"\r
+          >\r
+            <%= helpers.tr('Sign Out') %>\r
+          </a>\r
+          <a \r
+            href="/<%= data.lang %>/sign-in" \r
+            data-content="sign-in-up"\r
+            style="white-space: nowrap; overflow: hidden; <%= data.user ? 'display: none' : '' %>"\r
+          >\r
+            <%= helpers.tr('Sign In/Up') %>\r
+          </a>\r
         </div>\r
       </div>\r
       <div class="drawer-lang-bar">\r
@@ -1654,7 +1657,9 @@ var en_default = {
     "User with this email already exists": "User with this email already exists",
     "Email required": "Email required",
     "Name required": "Name required",
-    "Password required": "Password required"
+    "Password required": "Password required",
+    "To link with this OAuth account need to Sign Up": "To link with this OAuth account need to Sign Up",
+    "Could not to Sign In with this OAuth service": "Could not to Sign In with this OAuth service"
   }
 };
 
@@ -1676,7 +1681,9 @@ var ru_default = {
     "User with this email already exists": "\u041F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u044C \u0441 \u0442\u0430\u043A\u0438\u043C email \u0443\u0436\u0435 \u0441\u0443\u0449\u0435\u0441\u0442\u0432\u0443\u0435\u0442",
     "Email required": "\u041D\u0435\u043E\u0431\u0445\u043E\u0434\u0438\u043C\u043E \u0437\u0430\u043F\u043E\u043B\u043D\u0438\u0442\u044C email",
     "Name required": "\u041D\u0435\u043E\u0431\u0445\u043E\u0434\u0438\u043C\u043E \u0437\u0430\u043F\u043E\u043B\u043D\u0438\u0442\u044C \u0438\u043C\u044F",
-    "Password required": "\u041D\u0435\u043E\u0431\u0445\u043E\u0434\u0438\u043C\u043E \u0437\u0430\u043F\u043E\u043B\u043D\u0438\u0442\u044C \u043F\u0430\u0440\u043E\u043B\u044C"
+    "Password required": "\u041D\u0435\u043E\u0431\u0445\u043E\u0434\u0438\u043C\u043E \u0437\u0430\u043F\u043E\u043B\u043D\u0438\u0442\u044C \u043F\u0430\u0440\u043E\u043B\u044C",
+    "To link with this OAuth account need to Sign Up": "\u0427\u0442\u043E\u0431\u044B \u0441\u0432\u044F\u0437\u0430\u0442\u044C \u044D\u0442\u043E\u0433\u043E OAuth \u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u044F \u043D\u0435\u043E\u0431\u0445\u043E\u0434\u0438\u043C\u043E \u0437\u0430\u0440\u0435\u0433\u0438\u0442\u0440\u0438\u0440\u043E\u0432\u0430\u0442\u044C\u0441\u044F",
+    "Could not to Sign In with this OAuth service": "\u041D\u0435 \u0443\u0434\u0430\u043B\u043E\u0441\u044C \u0432\u043E\u0439\u0442\u0438 \u0441 \u043F\u043E\u043C\u043E\u0449\u044C\u044E \u044D\u0442\u043E\u0433\u043E OAuth \u0441\u0435\u0440\u0432\u0438\u0441\u0430"
   }
 };
 
@@ -1698,7 +1705,9 @@ var kz_default = {
     "User with this email already exists": "\u049A\u043E\u043B\u0434\u0430\u043D\u0443\u0448\u044B \u043E\u0441\u044B\u043D\u0434\u0430\u0439 email \u0431\u0430\u0440",
     "Email required": "Email \u0442\u043E\u043B\u0442\u044B\u0440\u0443 \u043A\u0435\u0440\u0435\u043A",
     "Name required": "\u0410\u0442\u044B\u04A3\u0434\u044B \u0442\u043E\u043B\u0442\u044B\u0440\u0443 \u043A\u0435\u0440\u0435\u043A",
-    "Password required": "\u041F\u0430\u0440\u043E\u043B\u044C\u0434\u044B \u0442\u043E\u043B\u0442\u044B\u0440\u0443 \u043A\u0435\u0440\u0435\u043A"
+    "Password required": "\u041F\u0430\u0440\u043E\u043B\u044C\u0434\u044B \u0442\u043E\u043B\u0442\u044B\u0440\u0443 \u043A\u0435\u0440\u0435\u043A",
+    "To link with this OAuth account need to Sign Up": "\u041C\u044B\u043D\u0430 OAuth \u0430\u043A\u043A\u0430\u043D\u0442\u0442\u044B \u0431\u0430\u0439\u043B\u0430\u043D\u044B\u0441\u0442\u044B\u0440\u0443 \u04AF\u0448\u0456\u043D \u0442\u0456\u0440\u043A\u0435\u043B\u0443 \u043A\u0435\u0440\u0435\u043A",
+    "Could not to Sign In with this OAuth service": "\u041C\u044B\u043D\u0430 OAuth \u0441\u0435\u0440\u0432\u0438\u0441 \u0430\u0440\u049B\u044B\u043B\u044B \u043A\u0456\u0440\u0435 \u0430\u043B\u043C\u0430\u0434\u044B"
   }
 };
 
@@ -1765,6 +1774,21 @@ function changeLangPath(url, lang) {
   }
   return `${lang}/${url}`;
 }
+function groupParamsByKey(params) {
+  return [...params.entries()].reduce((acc, tuple) => {
+    const [key, val] = tuple;
+    if (acc.hasOwnProperty(key)) {
+      if (Array.isArray(acc[key])) {
+        acc[key].push(val);
+      } else {
+        acc[key] = [acc[key], val];
+      }
+    } else {
+      acc[key] = val;
+    }
+    return acc;
+  }, {});
+}
 
 // src/server/helpers/layout-helpers.ts
 var layoutHandlersMap = {
@@ -1789,7 +1813,7 @@ function getLayoutHandlers(layouts) {
   }
   return handlers;
 }
-function renderPage(lang, rootLink, version2, page, pageName, pageLayout, data, layoutHandlers, partials, helpers) {
+function renderPage(lang, rootLink, version2, page, pageName, pageLayout, data, layoutHandlers, user, partials, helpers) {
   const translator = lang in locale_helpers_default ? locale_helpers_default[lang] : new import_i18n2.Translator();
   partials = {
     ...partials
@@ -1800,6 +1824,7 @@ function renderPage(lang, rootLink, version2, page, pageName, pageLayout, data, 
   };
   data = {
     ...data,
+    user,
     lang,
     rootLink
   };
@@ -1811,6 +1836,7 @@ function renderPage(lang, rootLink, version2, page, pageName, pageLayout, data, 
       const viewData = handler(page, {
         lang,
         rootLink,
+        user,
         data,
         helpers,
         partials,
@@ -1833,6 +1859,7 @@ function renderPage(lang, rootLink, version2, page, pageName, pageLayout, data, 
       lang,
       rootLink,
       version: version2,
+      user,
       content: viewName,
       contentData: data
     };
@@ -1862,6 +1889,7 @@ function mainLayoutHandler(page, input) {
     navigation,
     search,
     url,
+    user: input.user,
     query: page.query,
     languages: LANGUAGES,
     content: input.viewName,
@@ -1875,6 +1903,115 @@ function mainLayoutHandler(page, input) {
   };
 }
 
+// src/server/helpers/user-helpers.ts
+var import_i18n3 = __toESM(require_i18n());
+
+// src/server/db/knex.ts
+var import_knex = __toESM(require("knex"));
+var import_knexfile = __toESM(require_knexfile());
+
+// src/server/init-environment.ts
+var import_dotenv = __toESM(require_main());
+import_dotenv.default.config();
+
+// src/server/db/knex.ts
+var environment = process.env.NODE_ENV || "development";
+var config = import_knexfile.default[environment];
+var knex_default = (0, import_knex.default)(config);
+
+// src/server/helpers/user-helpers.ts
+var import_helpers2 = __toESM(require_helpers());
+async function getUserIdByEmail(email) {
+  const row = await knex_default("user").where("email", email).first("id");
+  return row?.id;
+}
+async function emailExist(email) {
+  const userId = await getUserIdByEmail(email);
+  return !!userId;
+}
+async function getUserInfoById(userId) {
+  if (userId) {
+    return await knex_default("user").where("id", userId).first("fullName", "photo");
+  }
+}
+async function signIn(email, password, lang, session) {
+  const translator = lang in locale_helpers_default ? locale_helpers_default[lang] : new import_i18n3.Translator();
+  const result = {
+    status: "OK" /* OK */
+  };
+  try {
+    const row = await knex_default("user").where("email", email).andWhere("password", (0, import_helpers2.generateMD5Hash)(password)).first("id", "photo", "fullName");
+    if (!row) {
+      result.status = "Error" /* Error */;
+      result.data = translator.translate("User with this email and password doesn't exist");
+    } else {
+      result.data = row;
+      session.userId = row.id || null;
+      session.service = null;
+    }
+  } catch (err) {
+    console.error(err);
+    result.status = "Error" /* Error */;
+    result.data = err?.message || err;
+  }
+  return result;
+}
+async function signUp(user, lang, session) {
+  const translator = lang in locale_helpers_default ? locale_helpers_default[lang] : new import_i18n3.Translator();
+  let result = {
+    status: "OK" /* OK */
+  };
+  if (!user.fullName) {
+    result.status = "Error" /* Error */;
+    result.data = translator.translate("Name required");
+  } else if (!user.email) {
+    result.status = "Error" /* Error */;
+    result.data = translator.translate("Email required");
+  } else if (!user.password) {
+    result.status = "Error" /* Error */;
+    result.data = translator.translate("Password required");
+  } else {
+    try {
+      const exist = await emailExist(user.email);
+      if (exist) {
+        result.status = "Error" /* Error */;
+        result.data = translator.translate("User with this email already exists");
+      } else {
+        user.createdAt = Date.now();
+        user.updatedAt = Date.now();
+        await knex_default("user").insert({
+          ...user,
+          password: (0, import_helpers2.generateMD5Hash)(user.password)
+        });
+        result = await signIn(user.email, user.password, lang, session);
+      }
+    } catch (err) {
+      console.error(err);
+      result.status = "Error" /* Error */;
+      result.data = err?.message || err;
+    }
+  }
+  return result;
+}
+async function getUserInfoFromSession(session) {
+  if (session.service) {
+    switch (session.service) {
+      case "github":
+        return getUserInfoFromGithub(session.data["oauthGithub"]);
+    }
+  } else {
+    return await getUserInfoById(session.userId);
+  }
+}
+function getUserInfoFromGithub(githubData) {
+  if (githubData) {
+    return {
+      fullName: githubData.user?.name,
+      photo: githubData.user?.avatar_url
+    };
+  }
+}
+
 // package.json
 var version = "1.0.0";
 
@@ -1884,6 +2021,7 @@ var routes_default = [{
   async handler(page) {
     if (page.state) {
       const lang = page.match?.[0] || DEFAULT_LANGUAGE;
+      const user = await getUserInfoFromSession(page.state.session);
       const data = {
         time: Date.now()
       };
@@ -1894,7 +2032,7 @@ var routes_default = [{
         const layouts = !page.query.ajax ? ["main-layout"] : stringToArray(page.query.layouts);
         const layoutHandlers = getLayoutHandlers(layouts);
         page.state.response.setHeader("Content-Type", "text/html;charset=UTF-8");
-        page.state.response.write(renderPage(lang, PAGE_ROOT, version, page, "home-page", home_page_default2, data, layoutHandlers));
+        page.state.response.write(renderPage(lang, PAGE_ROOT, version, page, "home-page", home_page_default2, data, layoutHandlers, user));
       }
     }
   }
@@ -2025,91 +2163,10 @@ var auth_service_component_default = `<h3 \r
 // src/server/templates/components/auth-service-component.ts
 var auth_service_component_default2 = import_ejs5.default.compile(auth_service_component_default);
 
-// src/server/helpers/user-helpers.ts
-var import_i18n3 = __toESM(require_i18n());
-
-// src/server/db/knex.ts
-var import_knex = __toESM(require("knex"));
-var import_knexfile = __toESM(require_knexfile());
-
-// src/server/init-environment.ts
-var import_dotenv = __toESM(require_main());
-import_dotenv.default.config();
-
-// src/server/db/knex.ts
-var environment = process.env.NODE_ENV || "development";
-var config = import_knexfile.default[environment];
-var knex_default = (0, import_knex.default)(config);
-
-// src/server/helpers/user-helpers.ts
-var import_helpers3 = __toESM(require_helpers());
-async function emailExist(email) {
-  const row = await knex_default("user").where("email", email).first("id");
-  return row && row.id > 0;
-}
-async function signIn(email, password, lang, session) {
-  const translator = lang in locale_helpers_default ? locale_helpers_default[lang] : new import_i18n3.Translator();
-  const result = {
-    status: "OK" /* OK */
-  };
-  try {
-    const row = await knex_default("user").where("email", email).andWhere("password", (0, import_helpers3.generateMD5Hash)(password)).first("id");
-    if (!row?.id) {
-      result.status = "Error" /* Error */;
-      result.data = translator.translate("User with this email and password doesn't exist");
-    } else {
-      session.userId = row.id;
-      session.service = null;
-    }
-  } catch (err) {
-    console.error(err);
-    result.status = "Error" /* Error */;
-    result.data = err?.message || err;
-  }
-  return result;
-}
-async function signUp(user, lang, session) {
-  const translator = lang in locale_helpers_default ? locale_helpers_default[lang] : new import_i18n3.Translator();
-  let result = {
-    status: "OK" /* OK */
-  };
-  if (!user.fullName) {
-    result.status = "Error" /* Error */;
-    result.data = translator.translate("Name required");
-  } else if (!user.email) {
-    result.status = "Error" /* Error */;
-    result.data = translator.translate("Email required");
-  } else if (!user.password) {
-    result.status = "Error" /* Error */;
-    result.data = translator.translate("Password required");
-  } else {
-    try {
-      const exist = await emailExist(user.email);
-      if (exist) {
-        result.status = "Error" /* Error */;
-        result.data = translator.translate("User with this email already exists");
-      } else {
-        user.createdAt = Date.now();
-        user.updatedAt = Date.now();
-        await knex_default("user").insert({
-          ...user,
-          password: (0, import_helpers3.generateMD5Hash)(user.password)
-        });
-        result = await signIn(user.email, user.password, lang, session);
-      }
-    } catch (err) {
-      console.error(err);
-      result.status = "Error" /* Error */;
-      result.data = err?.message || err;
-    }
-  }
-  return result;
-}
-
 // src/server/helpers.ts
 var import_fs = require("fs");
+var import_url = require("url");
 var import_crypto = require("crypto");
-var import_querystring = __toESM(require("querystring"));
 var import_router2 = __toESM(require_router2());
 function fragment(path, root) {
   let value = decodeURI(path);
@@ -2152,8 +2209,11 @@ async function getRequestData(request2) {
   for await (const chunk of request2) {
     chunks.push(chunk);
   }
-  const data = Buffer.concat(chunks).toString();
-  return import_querystring.default.parse(data);
+  return Buffer.concat(chunks).toString();
+}
+async function getUrlData(request2) {
+  const data = await getRequestData(request2);
+  return groupParamsByKey(new import_url.URLSearchParams(data));
 }
 function generateId() {
   return (0, import_crypto.randomBytes)(48).toString("hex");
@@ -2195,8 +2255,9 @@ var routes_default2 = [{
   async handler(page) {
     if (page.state) {
       const lang = page.match?.[0] || DEFAULT_LANGUAGE;
+      const user = await getUserInfoFromSession(page.state.session);
       if (page.state.request.method === "POST") {
-        const postData = await getRequestData(page.state.request);
+        const postData = await getUrlData(page.state.request);
         const result = await signIn(postData.email || "", postData.password || "", lang, page.state.session);
         if (page.query.ajax) {
           page.state.response.setHeader("Content-Type", "application/json;charset=UTF-8");
@@ -2216,7 +2277,7 @@ var routes_default2 = [{
           page.state.response.write(JSON.stringify(data));
         } else {
           page.state.response.setHeader("Content-Type", "text/html;charset=UTF-8");
-          page.state.response.write(renderPage(lang, PAGE_ROOT, version, page, "sign-in-page", sign_in_page_default2, data, void 0, {
+          page.state.response.write(renderPage(lang, PAGE_ROOT, version, page, "sign-in-page", sign_in_page_default2, data, void 0, user, {
             "auth-service-component": auth_service_component_default2
           }));
         }
@@ -2365,8 +2426,9 @@ var routes_default3 = [{
   async handler(page) {
     if (page.state) {
       const lang = page.match?.[0] || DEFAULT_LANGUAGE;
+      const user = await getUserInfoFromSession(page.state.session);
       if (page.state.request.method === "POST") {
-        const postData = await getRequestData(page.state.request);
+        const postData = await getUrlData(page.state.request);
         const result = await signUp(postData, lang, page.state.session);
         if (page.query.ajax) {
           page.state.response.setHeader("Content-Type", "application/json;charset=UTF-8");
@@ -2386,7 +2448,7 @@ var routes_default3 = [{
           page.state.response.write(JSON.stringify(data));
         } else {
           page.state.response.setHeader("Content-Type", "text/html;charset=UTF-8");
-          page.state.response.write(renderPage(lang, PAGE_ROOT, version, page, "sign-up-page", sign_up_page_default2, data, void 0, {
+          page.state.response.write(renderPage(lang, PAGE_ROOT, version, page, "sign-up-page", sign_up_page_default2, data, void 0, user, {
             "auth-service-component": auth_service_component_default2
           }));
         }
@@ -2397,6 +2459,7 @@ var routes_default3 = [{
 
 // src/server/auth/handlers/github.ts
 var import_https = require("https");
+var import_i18n4 = __toESM(require_i18n());
 var githubAuthorizeUrl = "https://github.com/login/oauth/authorize";
 var github_default = {
   service(page) {
@@ -2404,9 +2467,14 @@ var github_default = {
       const params = {
         client_id: process.env.GITHUB_CLIENT_ID || ""
       };
+      const state = {};
       if (page.query.lang) {
-        params.state = page.query.lang;
+        state.lang = page.query.lang;
       }
+      if (page.query.ajax) {
+        state.ajax = page.query.ajax;
+      }
+      params.state = JSON.stringify(state);
       const url = `${githubAuthorizeUrl}?${getQueryParameters(params)}`;
       page.state.response.statusCode = 302;
       page.state.response.setHeader("location", encodeURI(url));
@@ -2414,7 +2482,14 @@ var github_default = {
   },
   async callback(page) {
     if (page.state) {
-      const lang = page.query.state || "";
+      let state = {};
+      try {
+        state = JSON.parse(page.query.state);
+      } catch {
+      }
+      const lang = state.lang ?? DEFAULT_LANGUAGE;
+      const ajax = !!state.ajax;
+      const translator = lang in locale_helpers_default ? locale_helpers_default[lang] : new import_i18n4.Translator();
       const params = JSON.stringify({
         client_id: process.env.GITHUB_CLIENT_ID,
         client_secret: process.env.GITHUB_CLIENT_SECRET,
@@ -2433,8 +2508,7 @@ var github_default = {
         }, async (res) => {
           let data = {};
           try {
-            data = await getRequestData(res);
-            ;
+            data = JSON.parse(await getRequestData(res));
           } catch {
           }
           resolve(data);
@@ -2459,7 +2533,7 @@ var github_default = {
           }, async (res) => {
             let data = {};
             try {
-              data = await getRequestData(res);
+              data = JSON.parse(await getRequestData(res));
             } catch {
             }
             resolve(data);
@@ -2468,10 +2542,32 @@ var github_default = {
           req.end();
         });
         result["user"] = userData;
+        page.state.session.userId = await getUserIdByEmail(userData.email) ?? null;
+        page.state.session.service = "github";
+        page.state.session.data = {
+          ...page.state.session.data,
+          oauthGithub: result
+        };
+        if (ajax) {
+          page.state.response.setHeader("Content-Type", "application/json;charset=UTF-8");
+          page.state.response.write(JSON.stringify(result));
+        } else {
+          page.state.response.statusCode = 302;
+          if (!page.state.session.userId) {
+            page.state.response.setHeader("location", encodeURI((lang === DEFAULT_LANGUAGE ? "/sign-up" : `/${lang}/sign-up`) + `?warning=${translator.translate("To link with this OAuth account need to Sign Up")}`));
+          } else {
+            page.state.response.setHeader("location", encodeURI(lang === DEFAULT_LANGUAGE ? "/" : `/${lang}/`));
+          }
+        }
       } else {
+        if (ajax) {
+          page.state.response.setHeader("Content-Type", "application/json;charset=UTF-8");
+          page.state.response.write(JSON.stringify(result));
+        } else {
+          page.state.response.statusCode = 302;
+          page.state.response.setHeader("location", encodeURI((lang === DEFAULT_LANGUAGE ? "/sign-in" : `/${lang}/sign-in`) + `?error=${translator.translate("Could not to Sign In with this OAuth service")}`));
+        }
       }
-      page.state.response.setHeader("Content-Type", "application/json;charset=UTF-8");
-      page.state.response.write(JSON.stringify(result));
     }
   }
 };
@@ -2498,6 +2594,36 @@ var routes_default4 = [{
         case "github":
           await github_default.callback(page);
           break;
+      }
+    }
+  }
+}, {
+  rule: "auth/sign-out",
+  async handler(page) {
+    if (page.state) {
+      page.state.session.userId = null;
+      if (page.state.session.service) {
+        switch (page.state.session.service) {
+          case "github":
+            delete page.state.session.data.oauthGithub;
+            break;
+        }
+      }
+      page.state.session.service = null;
+      if (page.query.ajax) {
+        page.state.response.statusCode = 200;
+        page.state.response.setHeader("Content-Type", "application/json;charset=UTF-8");
+        page.state.response.write(JSON.stringify({
+          status: "OK" /* OK */
+        }));
+      } else {
+        const redirect = page.query.redirect;
+        page.state.response.statusCode = 302;
+        if (redirect) {
+          page.state.response.setHeader("location", encodeURI(redirect));
+        } else {
+          page.state.response.setHeader("location", "/");
+        }
       }
     }
   }

@@ -15,6 +15,8 @@ export default {
     "User with this email already exists": "Қолданушы осындай email бар",
     "Email required": "Email толтыру керек",
     "Name required": "Атыңды толтыру керек",
-    "Password required": "Парольды толтыру керек"
+    "Password required": "Парольды толтыру керек",
+    "To link with this OAuth account need to Sign Up": "Мына OAuth аккантты байланыстыру үшін тіркелу керек",
+    "Could not to Sign In with this OAuth service": "Мына OAuth сервис арқылы кіре алмады"
   }
 };

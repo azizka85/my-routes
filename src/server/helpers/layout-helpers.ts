@@ -14,6 +14,7 @@ import locales from './locale-helpers';
 import { toggleQueryParameter, changeLangPath } from '../../helpers';
 
 import { LANGUAGES } from '../../globals';
+import { User } from '../../data/user';
 
 export interface LayoutHandlerOutput {
   partials: {
@@ -30,6 +31,7 @@ export interface LayoutHandlerInput extends LayoutHandlerOutput {
   lang: string;
   rootLink: string;
   viewName: string;
+  user?: Pick<User, 'fullName' | 'photo'>;
 }
 
 export interface LayoutHandlerInfo {
@@ -73,19 +75,20 @@ export function getLayoutHandlers(layouts: string[]) {
 export function renderPage(
   lang: string,
   rootLink: string,
-  version: string,  
+  version: string,     
   page: Page<RouteOptions, RouteState>, 
   pageName: string,
   pageLayout: TemplateFunction, 
   data: any,   
   layoutHandlers?: LayoutHandlerInfo[],
+  user?: Pick<User, 'fullName' | 'photo'>,
   partials?: {
     [key: string]: TemplateFunction
   },
   helpers?: {
     [key: string]: (...items: any[]) => any;
   },
-) {
+) {  
   const translator = lang in locales ? locales[lang] : new Translator();
 
   partials = {
@@ -99,6 +102,7 @@ export function renderPage(
 
   data = {
     ...data,
+    user,
     lang,
     rootLink
   };
@@ -113,6 +117,7 @@ export function renderPage(
       const viewData = handler(page, {
         lang,
         rootLink,
+        user,
         data,
         helpers,
         partials,
@@ -140,6 +145,7 @@ export function renderPage(
       lang,
       rootLink,
       version,
+      user,
       content: viewName,
       contentData: data
     };
@@ -179,6 +185,7 @@ export function mainLayoutHandler(
     navigation,
     search,
     url,
+    user: input.user,
     query: page.query,
     languages: LANGUAGES,
     content: input.viewName,

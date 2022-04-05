@@ -18,7 +18,9 @@ var en_default = {
     "User with this email already exists": "User with this email already exists",
     "Email required": "Email required",
     "Name required": "Name required",
-    "Password required": "Password required"
+    "Password required": "Password required",
+    "To link with this OAuth account need to Sign Up": "To link with this OAuth account need to Sign Up",
+    "Could not to Sign In with this OAuth service": "Could not to Sign In with this OAuth service"
   }
 };
 export {

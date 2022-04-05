@@ -1,13 +1,15 @@
 import {
   AuthServiceComponent
-} from "../chunk-RLRVPLKC.js";
+} from "../chunk-UJOBCR4E.js";
 import {
   DEFAULT_LANGUAGE,
+  UserActionSetInfo,
   context,
+  layouts,
   loadContent,
   navigateHandler,
   routeNavigator
-} from "../chunk-L5HFSNW6.js";
+} from "../chunk-7FYKLDJF.js";
 import {
   __publicField
 } from "../chunk-U3RQVIYY.js";
@@ -50,12 +52,14 @@ var _SignInPage = class {
         if (response.status === 200) {
           const resData = await response.json();
           if (resData.status === "OK" /* OK */) {
+            layouts["main-layout"]?.performAction?.(UserActionSetInfo, resData.data);
             routeNavigator.redirectTo((this.lang === DEFAULT_LANGUAGE ? "" : `/${this.lang}`) + "/");
           } else {
             console.error(resData.data);
           }
         }
-      } finally {
+      } catch (err) {
+        console.error(err);
       }
     };
     this.signUpBtnClickHandler = (event) => navigateHandler(event, this.signUpBtn);

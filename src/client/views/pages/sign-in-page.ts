@@ -5,10 +5,11 @@ import { View } from '../view';
 import { AuthServiceComponent } from '../components/auth-service-component';
 
 import { Result, ResultStatus } from '../../../data/result';
+import { UserActionSetInfo } from '../../data/user';
 
 import { loadContent, navigateHandler } from '../../helpers';
 
-import { context, routeNavigator } from '../../globals';
+import { context, routeNavigator, layouts } from '../../globals';
 import { DEFAULT_LANGUAGE } from '../../../globals';
 
 export class SignInPage implements View {
@@ -67,6 +68,8 @@ export class SignInPage implements View {
           const resData = await response.json() as Result;
   
           if(resData.status === ResultStatus.OK) {
+            layouts['main-layout']?.performAction?.(UserActionSetInfo, resData.data);
+            
             routeNavigator.redirectTo(
               (this.lang === DEFAULT_LANGUAGE ? '' : `/${this.lang}`) + '/'
             );
@@ -74,8 +77,8 @@ export class SignInPage implements View {
             console.error(resData.data);          
           }
         }
-      } finally {
-
+      } catch(err) {
+        console.error(err);        
       }
     };
 

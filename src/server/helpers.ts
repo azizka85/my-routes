@@ -1,13 +1,15 @@
 import { lstatSync, readFileSync } from 'fs';
+import { URLSearchParams } from 'url';
 import { IncomingMessage, ServerResponse } from 'http';
 import { randomBytes } from 'crypto';
-import querystring from 'querystring';
 
 import { trimSlashes, parseQuery, Page } from '@azizka/router';
 
 import { RouteOptions } from './data/route-options';
 import { RouteState } from './data/route-state';
 import { CookieOptions } from './data/cookie-options';
+
+import { groupParamsByKey } from '../helpers';
 
 export function fragment(path: string, root: string) {
   let value = decodeURI(path);
@@ -62,9 +64,13 @@ export async function getRequestData(request: IncomingMessage) {
     chunks.push(chunk);
   }
 
-  const data = Buffer.concat(chunks).toString();
+  return Buffer.concat(chunks).toString();  
+}
 
-  return querystring.parse(data);
+export async function getUrlData(request: IncomingMessage) {
+  const data = await getRequestData(request);
+
+  return groupParamsByKey(new URLSearchParams(data));
 }
 
 export function generateId() {

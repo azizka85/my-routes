@@ -465,6 +465,9 @@ var require_router2 = __commonJS({
   }
 });
 
+// src/client/data/user.ts
+var UserActionSetInfo = "user-set-info";
+
 // src/globals.ts
 var PAGE_ROOT = "/";
 var LANGUAGES = {
@@ -540,9 +543,19 @@ async function unmount(elem) {
     await sleep(250);
   }
 }
+function signOut(redirect) {
+  layouts["main-layout"]?.performAction?.(UserActionSetInfo, null);
+  fetch("/auth/sign-out?ajax=1");
+  if (redirect) {
+    routeNavigator.redirectTo(redirect);
+  } else {
+    routeNavigator.redirectTo("/");
+  }
+}
 
 export {
   require_i18n,
+  UserActionSetInfo,
   require_router2 as require_router,
   LANGUAGES,
   DEFAULT_LANGUAGE,
@@ -555,6 +568,7 @@ export {
   navigateHandler,
   loadContent,
   mount,
-  unmount
+  unmount,
+  signOut
 };
-//# sourceMappingURL=chunk-L5HFSNW6.js.map
+//# sourceMappingURL=chunk-7FYKLDJF.js.map

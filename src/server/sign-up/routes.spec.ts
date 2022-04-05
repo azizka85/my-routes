@@ -11,7 +11,7 @@ jest.mock('../helpers', () => {
   return {
     __esModule: true,
     ...originalModule,
-    getRequestData: (request: any) => {
+    getUrlData: (request: any) => {
       if(request.correctUser) {
         return {
           fullName: 'Aziz Kudaikulov',

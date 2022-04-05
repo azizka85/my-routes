@@ -6,7 +6,14 @@ import { RouteState } from '../../data/route-state';
 import { View } from '../view';
 import { BaseLayout } from "./base-layout";
 
-import { ScrollActionTo, ScrollActionTop, ScrollEventData, ScrollEventType, SCROLL_THRESHOLD } from '../../data/scroll';
+import { UserActionSetInfo } from '../../data/user';
+import { 
+  ScrollActionTo, 
+  ScrollActionTop, 
+  ScrollEventData, 
+  ScrollEventType, 
+  SCROLL_THRESHOLD 
+} from '../../data/scroll';
 
 import { changeLangPath, toggleQueryParameter } from "../../../helpers";
 import { navigateHandler } from '../../helpers';
@@ -27,6 +34,11 @@ export class MainLayout extends BaseLayout implements View {
 
   protected headerIconElem: HTMLElement | null = null;
   protected headerIconBtn: HTMLElement | null = null;
+
+  protected drawerAccountPhoto: HTMLImageElement | null = null;
+  protected drawerAccountIcon: HTMLElement | null = null;
+
+  protected userNameElem: HTMLElement | null = null;
 
   protected signInUpElem: HTMLElement | null = null;
   protected signOutElem: HTMLElement | null = null;
@@ -49,6 +61,7 @@ export class MainLayout extends BaseLayout implements View {
   protected removeDrawerHoverClassHandler: () => void;
 
   protected signInUpElemClickHandler: (event: MouseEvent) => void;
+  protected signOutElemClickHandler: (event: MouseEvent) => void;
 
   protected langListItemClickHandlers: ((event: MouseEvent) => void)[] = [];
 
@@ -78,6 +91,7 @@ export class MainLayout extends BaseLayout implements View {
     this.removeDrawerHoverClassHandler = () => this.drawerElem?.classList.remove('drawer-hover');
 
     this.signInUpElemClickHandler = event => navigateHandler(event, this.signInUpElem as HTMLElement);
+    this.signOutElemClickHandler = event => navigateHandler(event, this.signOutElem as HTMLElement);
 
     this.searchInputFocusHandler = () => this.searchPanel?.classList.add('search-focus');
     
@@ -155,6 +169,11 @@ export class MainLayout extends BaseLayout implements View {
 
       const drawerAccountBar = this.drawerElem?.querySelector('.drawer-account-bar');
 
+      this.drawerAccountPhoto = drawerAccountBar?.querySelector('.drawer-account-bar-avatar-photo') || null;
+      this.drawerAccountIcon = drawerAccountBar?.querySelector('.drawer-account-bar-avatar-icon') || null;
+
+      this.userNameElem = drawerAccountBar?.querySelector('[data-content="user-name"]') || null; 
+
       this.signInUpElem = drawerAccountBar?.querySelector('[data-content="sign-in-up"]') || null;    
       this.signOutElem = drawerAccountBar?.querySelector('[data-content="sign-out"]') || null;     
 
@@ -185,6 +204,7 @@ export class MainLayout extends BaseLayout implements View {
     drawerAccountBar?.addEventListener('mouseenter', this.addDrawerHoverClassHandler);
 
     this.signInUpElem?.addEventListener('click', this.signInUpElemClickHandler);
+    this.signOutElem?.addEventListener('click', this.signOutElemClickHandler);
 
     const drawerLangBar = this.drawerElem?.querySelector('.drawer-lang-bar');
     drawerLangBar?.addEventListener('mouseenter', this.addDrawerHoverClassHandler);
@@ -240,6 +260,7 @@ export class MainLayout extends BaseLayout implements View {
     drawerAccountBar?.removeEventListener('mouseenter', this.addDrawerHoverClassHandler);
 
     this.signInUpElem?.removeEventListener('click', this.signInUpElemClickHandler);
+    this.signOutElem?.removeEventListener('click', this.signOutElemClickHandler);
 
     const drawerLangBar = this.drawerElem?.querySelector('.drawer-lang-bar');
     drawerLangBar?.removeEventListener('mouseenter', this.addDrawerHoverClassHandler);
@@ -374,6 +395,48 @@ export class MainLayout extends BaseLayout implements View {
           behavior: data?.noSmooth ? 'auto' : 'smooth'
         });                
         break;
+      case UserActionSetInfo: 
+        this.setUserInfo(data);    
+        break;
+    }
+  }
+
+  setUserInfo(data: any) {
+    if(!data) {
+      if(this.drawerAccountPhoto) {
+        this.drawerAccountPhoto.style.display = 'none';
+      }  
+      if(this.drawerAccountIcon) {
+        this.drawerAccountIcon.style.display = '';
+      }
+      if(this.userNameElem) {
+        this.userNameElem.style.display = 'none';
+      }
+      if(this.signOutElem) {
+        this.signOutElem.style.display = 'none';
+      }
+      if(this.signInUpElem) {
+        this.signInUpElem.style.display = '';
+      }
+    } else {
+      if(this.drawerAccountPhoto) {
+        this.drawerAccountPhoto.style.display = '';
+        this.drawerAccountPhoto.src = data.photo;
+        this.drawerAccountPhoto.alt = data.fullName;
+      }  
+      if(this.drawerAccountIcon) {
+        this.drawerAccountIcon.style.display = 'none';
+      }
+      if(this.userNameElem) {
+        this.userNameElem.style.display = '';
+        this.userNameElem.textContent = data.fullName;
+      }
+      if(this.signOutElem) {
+        this.signOutElem.style.display = '';
+      }
+      if(this.signInUpElem) {
+        this.signInUpElem.style.display = 'none';
+      }
     }
   }
 }

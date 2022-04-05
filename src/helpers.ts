@@ -76,3 +76,23 @@ export function changeLangPath(url: string, lang: string) {
 
   return `${lang}/${url}`;
 }
+
+export function groupParamsByKey(params: URLSearchParams) {
+  return [...params.entries()].reduce((acc, tuple) => {
+    const [key, val] = tuple;
+
+    if(acc.hasOwnProperty(key)) {
+      if(Array.isArray(acc[key])) {
+        (acc[key] as string[]).push(val);
+      } else {
+        acc[key] = [acc[key] as string, val];
+      }
+    } else {
+      acc[key] = val;
+    }
+
+    return acc;
+  }, {} as { 
+    [key: string]: string | string[] 
+  });
+}

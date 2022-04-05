@@ -6,15 +6,30 @@ import { generateMD5Hash } from '../db/helpers';
 import { Result, ResultStatus } from "../../data/result";
 import { User } from "../../data/user";
 import { Session } from "../data/session";
+import { Github } from '../data/github';
 
 import locales from './locale-helpers';
 
-export async function emailExist(email: string): Promise<boolean> {
+export async function getUserIdByEmail(email: string): Promise<number | undefined> {
   const row = await knex('user')
     .where('email', email)
     .first('id');
 
-  return row && row.id > 0;
+  return row?.id;
+}
+
+export async function emailExist(email: string): Promise<boolean> {
+  const userId = await getUserIdByEmail(email);
+
+  return !!userId;
+}
+
+export async function getUserInfoById(userId: number | null) {
+  if(userId) {
+    return await knex<User>('user')
+      .where('id', userId)
+      .first('fullName', 'photo')
+  }
 }
 
 export async function signIn(
@@ -30,16 +45,18 @@ export async function signIn(
   };
 
   try {
-    const row = await knex('user')      
+    const row = await knex<User>('user')      
       .where('email', email)
       .andWhere('password', generateMD5Hash(password))
-      .first('id');
+      .first('id', 'photo', 'fullName');
 
-    if(!row?.id) {
+    if(!row) {
       result.status = ResultStatus.Error;
       result.data = translator.translate("User with this email and password doesn't exist");
     } else {      
-      session.userId = row.id;
+      result.data = row;
+
+      session.userId = row.id || null;
       session.service = null;
     }
   } catch(err) {
@@ -75,6 +92,7 @@ export async function signUp(
   } else {
     try {
       const exist = await emailExist(user.email);
+      
       if(exist) {
         result.status = ResultStatus.Error;
         result.data = translator.translate('User with this email already exists');
@@ -98,4 +116,24 @@ export async function signUp(
   }  
 
   return result;
+}
+
+export async function getUserInfoFromSession(session: Session) {
+  if(session.service) {
+    switch(session.service) {
+      case 'github': 
+        return getUserInfoFromGithub(session.data['oauthGithub']);
+    }
+  } else {
+    return await getUserInfoById(session.userId);
+  }
+}
+
+export function getUserInfoFromGithub(githubData?: Github) {
+  if(githubData) {
+    return {
+      fullName: githubData.user?.name,
+      photo: githubData.user?.avatar_url
+    } as Pick<User, "fullName" | "photo">;
+  }
 }

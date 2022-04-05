@@ -2,7 +2,7 @@ import {
   BaseLayout,
   localeRoute,
   toCamel
-} from "./chunk-NCOTFIR5.js";
+} from "./chunk-MUOYOJ6Q.js";
 import {
   DEFAULT_LANGUAGE,
   context,
@@ -11,8 +11,9 @@ import {
   require_i18n,
   routeNavigator,
   router,
+  signOut,
   views
-} from "./chunk-L5HFSNW6.js";
+} from "./chunk-7FYKLDJF.js";
 import {
   __commonJS,
   __publicField,
@@ -272,6 +273,12 @@ window.addEventListener("DOMContentLoaded", () => {
     async handler(page) {
       queue.stop();
       loadPage(queue, page.match?.[0] || DEFAULT_LANGUAGE, page, "sign-up-page", [], firstTime);
+    }
+  }, {
+    rule: "auth/sign-out",
+    async handler(page) {
+      queue.stop();
+      queue.addTask(() => signOut(page.query.redirect));
     }
   }]);
   routeNavigator.addUriListener();
